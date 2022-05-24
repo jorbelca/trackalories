@@ -1,19 +1,18 @@
-import express from 'express';
-import { PORT } from './config/config';
-import router from './routes/routes';
+import express from 'express'
+import { PORT } from './config/config'
+import router from './routes/routes'
 
-const app = express();
-
+const app = express()
 
 app.use(express.json())
 
-
 app.get('/ping', (_, res) => {
-  res.send('pong');
-});
+  res.send('pong')
+})
 
 app.use('/api/', router)
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+  console.log(`Server running on port ${PORT}`)
+})

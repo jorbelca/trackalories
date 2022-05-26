@@ -4,6 +4,7 @@ import { resolve } from 'path'
 dotenv.config({ path: resolve(__dirname, '../../.env') })
 
 export const PORT = process.env.PORT
+export const MONGO = process.env.MONGO_URI
 
 // switch(process.env.NODE_ENV) {
 //   case "development":

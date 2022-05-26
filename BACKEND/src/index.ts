@@ -1,16 +1,28 @@
 import express from 'express'
-import { PORT } from './config/config'
-import router from './routes/routes'
+import { MONGO, PORT } from './config/config'
+import loginRouter from './routes/loginRoutes'
+import registerRouter from './routes/registerRoutes'
 
+import cors from 'cors'
+import { connect } from 'mongoose'
 const app = express()
 
+app.use(cors())
 app.use(express.json())
 
-app.get('/ping', (_, res) => {
-  res.send('pong')
-})
 
-app.use('/api/', router)
+app.use('/api/login', loginRouter)
+app.use('/api/register', registerRouter)
+
+
+
+connectMDB().catch(err => console.log(err));
+
+async function connectMDB() {
+  // Connect to MongoDB
+  await connect(`${MONGO}`);
+  console.log('Connected To MongoDB')
+}
 
 app.listen(PORT, () => {
   // eslint-disable-next-line @typescript-eslint/restrict-template-expressions

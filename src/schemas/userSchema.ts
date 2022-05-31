@@ -8,7 +8,8 @@ const userSchema = new Schema<User>({
   height: { type: Number, required: true },
   weight: { type: Number, required: true },
   activity: { type: Number, required: true },
-  gender: { type: String, required: true }
+  sex: { type: String, required: true },
+  birthdate: { type: Date, required: true }
 })
 
 const User = model<User>('User', userSchema)

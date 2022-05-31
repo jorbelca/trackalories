@@ -6,6 +6,7 @@ dotenv.config({ path: resolve(__dirname, '../../.env') })
 export const PORT = process.env.PORT
 export const MONGO = process.env.MONGO_URI
 export const SECRET = process.env.SECRET
+export const SALT_ROUNDS = Number(process.env.SALT_ROUNDS)
 
 // switch(process.env.NODE_ENV) {
 //   case "development":

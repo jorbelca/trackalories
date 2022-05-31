@@ -4,12 +4,18 @@ export interface User {
   password: String,
   height: Number,
   weight: Number,
-  gender: Gender,
-  activity: Number
+  sex: Sex,
+  activity: Number,
+  birthdate: Date
 }
 
 
-enum Gender {
+export enum Sex {
   male = 'male',
   female = 'female'
+}
+
+export interface Entry {
+  date: Date,
+  data: []
 }

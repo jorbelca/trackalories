@@ -1,22 +1,42 @@
 import express from 'express'
-import mongoose from 'mongoose';
+import { SALT_ROUNDS } from '../config/config';
 import User from '../schemas/userSchema';
-
+const bcrypt = require('bcrypt');
 const registerRouter = express.Router()
 
-registerRouter.post('/', async (req, res) => {
-  console.log(req.body);
+registerRouter.post('/', async (request, response) => {
+  const { password } = request.body
 
-  console.log("Register");
+  if (!password || password === undefined) {
+    return response.status(400).json({ error: "Password field is wrong" })
+  } else if (password.length < 3) {
+    return response
+      .status(400)
+      .json({ error: "The password must have at least 3 characters of length" })
+  }
 
-  const user = new User(
-    req.body
-  );
-  await user.save();
+  // ENCRIPTING PASSWORD
+  const passwordHash = await bcrypt.hashSync(password, SALT_ROUNDS)
 
-  res.send('Response to REGISTER POST')
+  const newUser = new User({
+    ...request.body,
+    password: passwordHash,
+  })
+  console.log(newUser);
 
-  mongoose.connection.close()
+
+  try {
+    await newUser.save();
+
+    return response.status(200).send(response)
+
+  } catch (error) {
+    console.error(error);
+    return response.status(400).send(error)
+
+  }
+
+
 })
 
 export default registerRouter

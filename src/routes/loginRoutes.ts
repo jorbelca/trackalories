@@ -1,23 +1,22 @@
 import express from 'express'
-import mongoose from 'mongoose';
+const bcrypt = require('bcrypt');
 import User from '../schemas/userSchema';
 // const jwt = require("jsonwebtoken")
-// const bcrypt = require("bcrypt")
+
 
 const loginRouter = express.Router()
 
 loginRouter.post('/', async (request, response) => {
-  // const { email, password } = request.body
+  const { email, password } = request.body
 
-  const user = await User.findOne(request.body)
+  const user: any = await User.find({ email: email })
 
-  // const passwordCorrect =
-  //   user === null ? false : await bcrypt.compare(password, email.passwordHash)
+  const passwordCorrect = user === null ? false :
+    await bcrypt.compare(password, user[0].password)
+
 
   try {
-
-    response.status(200).json(user)
-    mongoose.connection.close()
+    if (passwordCorrect) response.status(200).json(user)
 
   } catch (error) {
     console.log(error)

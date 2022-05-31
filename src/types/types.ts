@@ -7,6 +7,7 @@ export interface User {
   sex: Sex,
   activity: Number,
   birthdate: Date
+  entries: Entry[]
 }
 
 
@@ -16,6 +17,7 @@ export enum Sex {
 }
 
 export interface Entry {
-  date: Date,
-  data: []
+  date: String | undefined,
+  data: [],
+  user: String
 }

@@ -22,7 +22,7 @@ registerRouter.post('/', async (request, response) => {
     ...request.body,
     password: passwordHash,
   })
-  console.log(newUser);
+
 
 
   try {

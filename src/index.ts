@@ -3,7 +3,7 @@ import { MONGO, PORT } from './config/config'
 import loginRouter from './routes/loginRoutes'
 import registerRouter from './routes/registerRoutes'
 import mealsRouter from './routes/mealsRoutes'
-
+const tokenExtractor = require('./utils/tokenExtractor')
 import cors from 'cors'
 import { connect } from 'mongoose'
 
@@ -15,6 +15,7 @@ app.use(express.json())
 
 app.use('/api/login', loginRouter)
 app.use('/api/register', registerRouter)
+app.use(tokenExtractor)
 app.use('/api/meals', mealsRouter)
 
 

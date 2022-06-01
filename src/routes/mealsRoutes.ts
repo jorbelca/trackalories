@@ -1,12 +1,13 @@
 import express from 'express'
 import Entry from '../schemas/entrySchema';
 import User from '../schemas/userSchema';
-import getDay from '../utils/getDate';
+
 
 const mealsRouter = express.Router()
 
 mealsRouter.get("/", async (_request, response) => {
   const meals = await Entry.find({}).populate("user", { username: 1 })
+
 
   response.status(200).json(meals)
 })
@@ -16,10 +17,12 @@ mealsRouter.get("/", async (_request, response) => {
 mealsRouter.post('/', async (request, response) => {
   const { date, userID, data } = request.body
 
-  if (date === getDay()) {
 
-    const meal: any = await Entry.find({ date: date, user: userID })
 
+  const meal: any = await Entry.find({ date: date, user: userID })
+
+
+  if (meal.length > 0) {
     meal[0].data = meal[0].data.concat(data[0])
 
     try {

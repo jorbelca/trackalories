@@ -26,19 +26,17 @@ loginRouter.post('/', async (request, response) => {
   const token = jwt.sign(userToken, SECRET, {
     expiresIn: 60 * 60 * 24 * 5,
   })
-  console.log(user);
+
 
   try {
     response.status(200).json({
       username: user.username,
-      email: user.email,
-      activity: user.activity,
-      weight: user.weight,
       token
     })
 
   } catch (error) {
     console.log(error)
+    response.status(400).send(error)
   }
 
 })

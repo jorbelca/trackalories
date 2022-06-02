@@ -3,7 +3,7 @@ export interface User {
   email: String,
   password: String,
   height: Number,
-  weight: Number,
+  weight: Weight[],
   sex: Sex,
   activity: Number,
   birthdate: Date
@@ -20,4 +20,9 @@ export interface Entry {
   date: String | undefined,
   data: [],
   user: String
+}
+
+export interface Weight {
+  date: String,
+  weight: Number
 }

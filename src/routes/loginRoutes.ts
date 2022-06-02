@@ -11,8 +11,12 @@ loginRouter.post('/', async (request, response) => {
   const { email, password } = request.body
 
   const returnedUser: any = await User.find({ email: email })
-  let user = returnedUser[0]
 
+  if (returnedUser.length === 0 || !returnedUser || returnedUser === undefined) {
+    return response.status(404).json({ error: "No data in the DB" })
+  }
+
+  let user = returnedUser[0]
   const passwordCorrect = user === null ? false :
     await bcrypt.compare(password, user.password)
 
@@ -29,14 +33,14 @@ loginRouter.post('/', async (request, response) => {
 
 
   try {
-    response.status(200).json({
+    return response.status(200).json({
       username: user.username,
       token
     })
 
   } catch (error) {
     console.log(error)
-    response.status(400).send(error)
+    return response.status(400).send(error)
   }
 
 })

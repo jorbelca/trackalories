@@ -34,7 +34,7 @@ weightRouter.post('/', async (request, response) => {
 
   user.weight = user.weight.concat({ date: date, weight: weight })
 
-  console.log(user);
+
 
   try {
     await user.save();

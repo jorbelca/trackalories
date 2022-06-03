@@ -1,6 +1,7 @@
 import express from 'express'
+import { SALT_ROUNDS } from '../config/config'
 import User from '../schemas/userSchema'
-
+const bcrypt = require('bcrypt');
 
 const personalRouter = express.Router()
 
@@ -23,46 +24,34 @@ personalRouter.get("/", async (request, response) => {
 })
 
 
-// personalRouter.post('/', async (request, response) => {
-//   const { date, userID, data } = request.body
-
-//   const meal: any = await Entry.find({ date: date, user: userID })
+personalRouter.put('/', async (request, response) => {
+  let { userID, username, email, password, activity } = request.body
 
 
-//   if (meal.length > 0) {
-//     meal[0].data = meal[0].data.concat(data)
-//     try {
-//       await meal[0].save()
-//       return response.status(200).json(meal[0])
-//     } catch (error) {
-//       console.log(error)
-//       return response.status(400)
-//     }
-//   }
+  const returnedUser: any = await User.findById(userID)
 
-//   const mealEntry = new Entry({
-//     ...request.body,
-//     user: userID
-//   }
-//   );
+  if (!returnedUser || returnedUser === undefined) {
+    return response.status(404).json({ error: "No data" })
+  }
 
-//   const user: any = await User.findById(userID)
+  if (password !== undefined) password = await bcrypt.hashSync(password, SALT_ROUNDS)
 
 
-//   user.entries = user.entries.concat(mealEntry._id)
-//   try {
-//     await mealEntry.save();
-//     await user.save()
+  await User.findByIdAndUpdate(userID, {
+    username: username,
+    email: email,
+    activity: activity,
+    password
+  }, { runValidators: true })
 
-//     return response.status(200).json(mealEntry)
 
-
-//   } catch (error) {
-//     console.log(error)
-//     return response.status(400)
-//   }
-
-// })
+  try {
+    return response.status(200).send('Done!')
+  } catch (error) {
+    console.error(error)
+    return response.status(400).send(error)
+  }
+})
 
 
 export default personalRouter

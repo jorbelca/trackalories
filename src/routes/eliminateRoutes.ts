@@ -16,6 +16,8 @@ eliminateRouter.delete('/', async (request, response) => {
 
 
   try {
+    console.log("ENTRA");
+    
     return response.status(200).json({ message: 'Erased from the DB' })
   } catch (error) {
     console.error(error)

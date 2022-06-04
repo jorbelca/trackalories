@@ -1,6 +1,6 @@
 import express from 'express'
 import User from '../schemas/userSchema'
-import getDay from '../utils/getDate'
+
 
 const weightRouter = express.Router()
 
@@ -25,15 +25,15 @@ weightRouter.get("/", async (request, response) => {
 weightRouter.post('/', async (request, response) => {
   const { weight, date, userID } = request.body
 
-  if (date == getDay()) {
-    return response.status(400).json({ error: "Only one weight post per day" })
-  }
-
   const user: any = await User.findById(userID)
 
+  const lastWeight = user.weight[user.weight.length - 1].date
 
+
+  if (date == lastWeight) {
+    return response.status(400).json({ error: "Only one weight post per day" })
+  }
   user.weight = user.weight.concat({ date: date, weight: weight })
-
 
 
   try {

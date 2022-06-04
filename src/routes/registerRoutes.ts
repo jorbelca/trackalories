@@ -7,6 +7,8 @@ const registerRouter = express.Router()
 registerRouter.post('/', async (request, response) => {
   const { password } = request.body
 
+
+
   if (!password || password === undefined) {
     return response.status(400).json({ error: "Password field is wrong" })
   } else if (password.length < 3) {
@@ -26,9 +28,11 @@ registerRouter.post('/', async (request, response) => {
 
 
   try {
+    console.log(newUser)
+
     await newUser.save();
 
-    return response.status(200).send(response)
+    return response.status(200).send("Registered")
 
   } catch (error) {
     console.error(error);

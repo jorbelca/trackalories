@@ -28,8 +28,6 @@ registerRouter.post('/', async (request, response) => {
 
 
   try {
-    console.log(newUser)
-
     await newUser.save();
 
     return response.status(200).send("Registered")

@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.ts",
+  "engines": {
+    "node": "16.15.0",
+    "npm": "8.5.5"
+  },
   "scripts": {
     "start": "node build/index.js",
     "dev": "ts-node-dev src/index.ts",
@@ -10,6 +14,7 @@
     "lint.fix": "eslint --fix --ext .ts ",
     "tsc": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
+    ,"heroku-postbuild": "tsc"
   },
   "keywords": [],
   "author": "Jordi Belda",

@@ -36,10 +36,11 @@ weightRouter.post('/', async (request, response) => {
   user.weight = user.weight.concat({ date: date, weight: weight })
 
 
-  try {
-    await user.save();
 
-    return response.status(200).json(user)
+  try {
+    await User.updateOne({ _id: userID }, { weight: user.weight });
+
+    return response.status(200).json({ username: user.username, weight: user.weight })
 
   } catch (error) {
     console.log(error)

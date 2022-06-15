@@ -3,7 +3,6 @@ import { SECRET } from "../config/config"
 const jwt = require("jsonwebtoken")
 
 const tokenExtractor = (request: any, response: any, next: any) => {
-
   let token
   const authorization = request.get("authorization")
 
@@ -14,7 +13,6 @@ const tokenExtractor = (request: any, response: any, next: any) => {
 
     return response.status(401).json({ error: "Token missing or invalid" })
   }
-
 
   const decodedToken = jwt.verify(token, SECRET)
 
@@ -28,4 +26,4 @@ const tokenExtractor = (request: any, response: any, next: any) => {
 
   next()
 }
-module.exports = tokenExtractor
+export default tokenExtractor

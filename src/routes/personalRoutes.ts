@@ -7,17 +7,20 @@ const bcrypt = require('bcrypt');
 const personalRouter = express.Router()
 
 
-personalRouter.get("/",tokenExtractor, async (request, response) => {
+personalRouter.get("/", tokenExtractor, async (request, response) => {
   const { userID } = request.body
   const returnedUser: any = await User.findById(userID)
-  let { username, email, activity, height, weight } = returnedUser
+  let { username, email, activity, height, weight, birthdate, sex } = returnedUser
 
   if (!returnedUser || returnedUser === undefined) {
     return response.status(404).json({ error: "No data" })
   }
 
   try {
-    return response.status(200).json({ username: username, email: email, activity: activity, height: height, weight: weight })
+    return response.status(200).json({
+      username: username, email: email, activity: activity, height: height, weight: weight, sex: sex,
+      birthdate: birthdate
+    })
   } catch (error) {
     console.error(error)
     return response.status(400).send(error)
@@ -25,7 +28,7 @@ personalRouter.get("/",tokenExtractor, async (request, response) => {
 })
 
 
-personalRouter.put('/',tokenExtractor, async (request, response) => {
+personalRouter.put('/', tokenExtractor, async (request, response) => {
   let { userID, username, email, password, activity } = request.body
 
 

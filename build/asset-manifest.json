@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/static/css/main.5963eb4b.css",
+    "main.js": "/static/js/main.6926ed55.js",
+    "static/media/calories-icon-4.jpg": "/static/media/calories-icon-4.c1c2ec91ead55fe3810a.jpg",
+    "index.html": "/index.html",
+    "main.5963eb4b.css.map": "/static/css/main.5963eb4b.css.map",
+    "main.6926ed55.js.map": "/static/js/main.6926ed55.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.5963eb4b.css",
+    "static/js/main.6926ed55.js"
+  ]
+}

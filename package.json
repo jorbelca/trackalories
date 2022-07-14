@@ -17,8 +17,8 @@
     "heroku-postbuild": "tsc"
   },
   "keywords": [],
-  "author": "Jordi Belda",
-  "license": "ISC",
+  "author": "jorbelca",
+  "license": "MIT",
   "devDependencies": {
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",

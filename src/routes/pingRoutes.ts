@@ -4,7 +4,7 @@ const pingRouter = express.Router()
 
 pingRouter.get("/", async (_request, response) => {
 
-  response.status(200).send("PONG")
+  response.status(200).json({ message: "PONG" })
 })
 
 

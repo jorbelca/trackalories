@@ -25,11 +25,11 @@ const pingRoutes_1 = __importDefault(require("./routes/pingRoutes"));
 const eliminateUserRoutes_1 = __importDefault(require("./routes/eliminateUserRoutes"));
 const clearRouter_1 = __importDefault(require("./routes/clearRouter"));
 const corsOptions = {
-    origin: ["https://trackalories.vercel.app/", "http://localhost:3000"],
-    optionsSuccessStatus: 204,
+    origin: ["https://trackalories.vercel.app", "http://localhost:3000"],
+    optionsSuccessStatus: 200,
 };
 const app = (0, express_1.default)();
-// app.options("*", cors(corsOptions))
+// app.options("*", cors (corsOptions:CorsOptions))
 app.use((0, cors_1.default)(corsOptions));
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.json());

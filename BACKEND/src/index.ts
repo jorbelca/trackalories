@@ -13,12 +13,12 @@ import eliminateUserRouter from "./routes/eliminateUserRoutes"
 import clearRouter from "./routes/clearRouter"
 
 const corsOptions = {
-  origin: ["https://trackalories.vercel.app/", "http://localhost:3000"],
-  optionsSuccessStatus: 204,
+  origin: ["https://trackalories.vercel.app", "http://localhost:3000"],
+  optionsSuccessStatus: 200,
 }
 
 const app = express()
-// app.options("*", cors(corsOptions))
+// app.options("*", cors (corsOptions:CorsOptions))
 app.use(cors(corsOptions))
 
 app.use(express.urlencoded({ extended: true }))

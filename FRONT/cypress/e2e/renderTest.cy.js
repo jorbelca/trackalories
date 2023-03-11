@@ -26,7 +26,7 @@ before(() => {
 
 describe("Trackalories App", function () {
   it("front page can be opened", function () {
-    cy.visit("http://localhost:3000").wait(5000)
+    cy.visit("http://localhost:3000")
     cy.contains("TrackAlories")
     cy.contains("Register").click()
   })
@@ -35,7 +35,8 @@ describe("Trackalories App", function () {
 
 describe("Register and Login", function () {
   it("can register a user", function () {
-    cy.contains("Register")
+    cy.visit("http://localhost:3000")
+    cy.contains("Register").click()
     cy.get('[data-cy="register-username"]').type(`${username}`)
     cy.get('[data-cy="register-email"]').type(`${email}`)
     cy.get('[data-cy="register-password"]').type(`${password}`)
@@ -48,8 +49,9 @@ describe("Register and Login", function () {
     cy.get('[data-cy="register-button"]').contains("Register").click()
   })
   it("can login", function () {
+    cy.visit("http://localhost:3000")
     cy.contains("Log In").click()
-    cy.contains("Login").wait(1000)
+    cy.contains("Login")
     cy.get('[data-cy="login-email"]').type(`${email}`)
     cy.get('[data-cy="login-password"]').type(`${password}`)
     cy.get(".button").contains("Login").click()
@@ -65,6 +67,11 @@ describe("Search", function () {
     cy.saveLocalStorage();
   });
   it("can search food", function () {
+    cy.visit("http://localhost:3000")
+    cy.contains("Log In").click()
+    cy.get('[data-cy="login-email"]').type(`${email}`)
+    cy.get('[data-cy="login-password"]').type(`${password}`)
+    cy.get(".button").contains("Login").click()
     cy.get('[data-cy="search-bar"]').type('duck')
     cy.get(".button").contains("Search").click().wait(500)
     cy.get(".button-add").click()
@@ -81,7 +88,12 @@ describe("Search", function () {
 
 describe("Diary", function () {
   const date = getCompleteDate()
-  it.skip("can see the searched food", function () {
+  it("can see the searched food", function () {
+    cy.visit("http://localhost:3000")
+    cy.contains("Log In").click()
+    cy.get('[data-cy="login-email"]').type(`${email}`)
+    cy.get('[data-cy="login-password"]').type(`${password}`)
+    cy.get(".button").contains("Login").click()
     cy.get("a.icon-text i.fa-solid.fa-book-open").click()
     cy.get("a.icon-text i.fa-solid.fa-book-open").click()
     cy.get("a.icon-text i.fa-solid.fa-book-open").click()
@@ -94,8 +106,14 @@ describe("Diary", function () {
 
 describe("Update Profile", function () {
 
-  it.skip("can update the email profile", function () {
+  it("can update the email profile", function () {
+    cy.visit("http://localhost:3000")
+    cy.contains("Log In").click()
+    cy.get('[data-cy="login-email"]').type(`${email}`)
+    cy.get('[data-cy="login-password"]').type(`${password}`)
+    cy.get(".button").contains("Login").click()
     cy.contains(username).click()
+    cy.visit("http://localhost:3000")
     cy.get('[data-cy="update-email"]').type(updatedEmail)
     cy.get('[data-cy="update-activity"]').select("I make exercise 2 days of the week")
     cy.get('[data-cy="update-button"]').contains("Update Profile Info").click().wait(1000).then(res => {
@@ -106,7 +124,7 @@ describe("Update Profile", function () {
 
 describe("Eliminate Profile", function () {
   it("can eliminate the profile", function () {
-    cy.visit("http://localhost:3000").wait(5000)
+    cy.visit("http://localhost:3000")
     cy.contains("Log In").click()
     cy.get('[data-cy="login-email"]').type(`${email}`)
     cy.get('[data-cy="login-password"]').type(`${password}`)

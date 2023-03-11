@@ -1,13 +1,29 @@
-import React, { useState } from "react"
+import { useCallback, useState } from "react"
 import searchService from "../Services/searchService"
 import { notificationStore, searchStore } from "../state/store"
 import Results from "./Results"
+import debounce from "just-debounce-it"
 
 const Search = () => {
   const [search, setSearchFood] = useState("")
 
   const setSearch = searchStore((state) => state.setSearch)
   const setNotification = notificationStore((state) => state.setNotifications)
+
+  const debouncedSearchService = useCallback(
+    debounce(async (search) => {
+      const response = await searchService(search)
+      setSearchFood("")
+
+      // Handle errors
+      if (response.status !== 200) {
+        return setNotification({ error: response.response.data.message })
+      }
+      // Storing in the global state
+      if (response.status === 200) setSearch(response.data.foods[0])
+    }, 700),
+    []
+  )
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -18,8 +34,8 @@ const Search = () => {
     // Service for the search of the meal
     const response = await searchService(search)
     setSearchFood("")
-    // Handle errors
 
+    // Handle errors
     if (response.status !== 200) {
       return setNotification({ error: response.response.data.message })
     }
@@ -32,6 +48,7 @@ const Search = () => {
     if (e.target.value.startsWith(" ")) return
 
     setSearchFood(e.target.value)
+    debouncedSearchService(e.target.value)
   }
 
   return (

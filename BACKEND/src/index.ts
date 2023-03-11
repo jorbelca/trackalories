@@ -5,14 +5,23 @@ import registerRouter from "./routes/registerRoutes"
 import mealsRouter from "./routes/mealsRoutes"
 import weightRouter from "./routes/weightRoutes"
 import personalRouter from "./routes/personalRoutes"
-
+import cors from "cors"
 import { connect } from "mongoose"
 
 import pingRouter from "./routes/pingRoutes"
 import eliminateUserRouter from "./routes/eliminateUserRoutes"
 import clearRouter from "./routes/clearRouter"
 
+const corsOptions = {
+  origin: ["https://trackalories.vercel.app/", "http://localhost:3000"],
+  optionsSuccessStatus: 204,
+}
+
 const app = express()
+app.options("*", cors(corsOptions))
+app.use(cors(corsOptions))
+
+app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
 app.use("/api/ping", pingRouter)

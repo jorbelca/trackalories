@@ -8,7 +8,12 @@ const eliminateUser = async (token) => {
 
   try {
     const response = await axios.delete(baseUrl, {
-      headers: setHeader(token),
+      headers: {
+        "Content-Type": "application/json; charset=UTF-8 ",
+        Accept: "application/json", 
+        Authorization:setHeader(token)},
+        'Access-Control-Allow-Origin': '*',
+      mode: "cors",
     })
 
     return response

@@ -24,25 +24,30 @@ const mongoose_1 = require("mongoose");
 const pingRoutes_1 = __importDefault(require("./routes/pingRoutes"));
 const eliminateUserRoutes_1 = __importDefault(require("./routes/eliminateUserRoutes"));
 const clearRouter_1 = __importDefault(require("./routes/clearRouter"));
+const corsOptions = {
+    origin: ["https://trackalories.vercel.app/", "http://localhost:3000"],
+    optionsSuccessStatus: 204,
+};
 const app = (0, express_1.default)();
-app.use((0, cors_1.default)());
+// app.options("*", cors(corsOptions))
+app.use((0, cors_1.default)(corsOptions));
+app.use(express_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.json());
-app.use(express_1.default.static('./build'));
-app.use('/api/ping', pingRoutes_1.default);
-app.use('/api/login', loginRoutes_1.default);
-app.use('/api/register', registerRoutes_1.default);
-app.use('/api/eliminate', eliminateUserRoutes_1.default);
-app.use('/api/meals', mealsRoutes_1.default);
-app.use('/api/personal', personalRoutes_1.default);
-app.use('/api/weight', weightRoutes_1.default);
-app.use('/cleardb_test', clearRouter_1.default);
-connectMDB().catch(err => console.log(err));
+app.use("/api/ping", pingRoutes_1.default);
+app.use("/api/login", loginRoutes_1.default);
+app.use("/api/register", registerRoutes_1.default);
+app.use("/api/eliminate", eliminateUserRoutes_1.default);
+app.use("/api/meals", mealsRoutes_1.default);
+app.use("/api/personal", personalRoutes_1.default);
+app.use("/api/weight", weightRoutes_1.default);
+app.use("/cleardb_test", clearRouter_1.default);
+connectMDB().catch((err) => console.log(err));
 function connectMDB() {
     return __awaiter(this, void 0, void 0, function* () {
         // Connect to MongoDB
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         (0, mongoose_1.connect)(`${config_1.MONGO}`);
-        console.log('Connected To MongoDB');
+        console.log("Connected To MongoDB");
     });
 }
 app.listen(config_1.PORT, () => {

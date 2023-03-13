@@ -3,7 +3,7 @@ const getCompleteDate = () => {
   let day = currentDate.getDate()
   let month = currentDate.getMonth() + 1
   let year = currentDate.getFullYear()
-  let completeDate = (year + "/" + month + "/" + day)
+  let completeDate = year + "/" + month + "/" + day
   return completeDate
 }
 

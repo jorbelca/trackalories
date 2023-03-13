@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import  { useState } from "react"
 import Bar from "../Components/Bar"
 import { notificationStore, userStore } from "../state/store"
 import { updatePersonalInfo } from "../Services/personalService"

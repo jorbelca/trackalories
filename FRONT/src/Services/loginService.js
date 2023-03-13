@@ -4,13 +4,14 @@ const baseUrl = `${BACKEND_API_URL}/api/login`
 
 const loginService = async (credentials) => {
   try {
-    const response = await axios.post(baseUrl, credentials,{
-      mode: 'cors',
-      headers:{        
-        "Access-Control-Allow-Origin": "*" ,
+    const response = await axios.post(baseUrl, credentials, {
+      mode: "cors",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
         "Content-Type": "application/json ",
-        "Accept": "*/*",
-        "Connection": "keep-alive"}})
+        Accept: "*/*",
+      },
+    })
 
     return response
   } catch (error) {

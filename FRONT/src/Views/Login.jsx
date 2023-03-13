@@ -33,6 +33,7 @@ function Login() {
     if (response.status === 200) {
       setUser(response.data)
       window.localStorage.setItem("loggedUser", response.data.token)
+      setNotification({ message: "Welcome!" })
       navigate("/search", { replace: true })
     }
   }

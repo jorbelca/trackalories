@@ -1,4 +1,4 @@
-/// <reference types="cypress" />
+
 /* eslint-disable cypress/no-unnecessary-waiting */
 import getCompleteDate from "../../src/Services/completeDate"
 const username = "test"

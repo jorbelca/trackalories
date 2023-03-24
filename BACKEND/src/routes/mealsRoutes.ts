@@ -1,18 +1,20 @@
-import express from 'express'
-import Entry from '../schemas/entrySchema'
-import User from '../schemas/userSchema'
-import tokenExtractor from '../utils/tokenExtractor'
+import express from "express"
+import Entry from "../schemas/entrySchema"
+import User from "../schemas/userSchema"
+import tokenExtractor from "../utils/tokenExtractor"
 
 const mealsRouter = express.Router()
 
-mealsRouter.get('/', tokenExtractor, async (request, response) => {
+mealsRouter.get("/", tokenExtractor, async (request, response) => {
   const { userID } = request.body
-  const meals = await Entry.find({ user: userID }).populate('user', { username: 1 })
+  const meals = await Entry.find({ user: userID })
+    .sort({ date: -1 })
+    .populate("user", { username: 1 })
 
   response.status(200).json(meals)
 })
 
-mealsRouter.post('/', tokenExtractor, async (request, response) => {
+mealsRouter.post("/", tokenExtractor, async (request, response) => {
   const { date, userID, data } = request.body
 
   const meal: any = await Entry.find({ date: date, user: userID })
@@ -30,9 +32,8 @@ mealsRouter.post('/', tokenExtractor, async (request, response) => {
 
   const mealEntry = new Entry({
     ...request.body,
-    user: userID
-  }
-  )
+    user: userID,
+  })
 
   const user: any = await User.findById(userID)
 

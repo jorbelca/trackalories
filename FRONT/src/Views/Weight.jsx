@@ -46,7 +46,7 @@ const Weight = () => {
     if (response.status === 200) {
       setWeights(response.data.weight)
       setUserWeight(response.data)
-      setFormWeight()
+      setFormWeight("")
       return setNotification({ message: response.statusText })
     }
   }

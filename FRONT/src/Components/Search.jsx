@@ -67,9 +67,9 @@ const Search = () => {
                   data-cy="search-bar"
                 />
               </div>
-              <div className="control">
+              {/* <div className="control">
                 <button className="button is-success">Search</button>
-              </div>
+              </div> */}
             </div>
           </form>
           {/* Results of the search */}

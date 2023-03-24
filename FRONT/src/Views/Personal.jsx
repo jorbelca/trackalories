@@ -48,7 +48,7 @@ const Personal = () => {
 
     if (
       window.confirm(
-        "You're going to eliminate all the information of your profile. This action is irrevocable. Want to continue?"
+        "You're going to eliminate all the information of your profile. This action is irreversible. Want to continue?"
       )
     ) {
       const token = window.localStorage.getItem("loggedUser")

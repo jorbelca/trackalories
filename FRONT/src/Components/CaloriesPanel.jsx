@@ -50,31 +50,31 @@ const CaloriesPanel = () => {
         <article className="media-content is-size-15 has-text-justified">
           <br />
           <div>
-            For <span class="is-underlined">gaining weight</span>, you must
+            For <span className="is-underlined">gaining weight</span>, you must
             ingest <b>{(calories * 1.2).toFixed(2)} </b>
             calories/day
           </div>
           <br />
           <div>
-            For <span class="is-underlined">gaining weight mildly</span>, you
-            must ingest <b>{(calories * 1.1).toFixed(2)}</b> calories/day
+            For <span className="is-underlined">gaining weight mildly</span>,
+            you must ingest <b>{(calories * 1.1).toFixed(2)}</b> calories/day
           </div>
 
           <br />
           <div>
             Based on your last weight and your current level of activity your
-            calories of <span class="is-underlined">maintenance</span> are{" "}
+            calories of <span className="is-underlined">maintenance</span> are{" "}
             <b>{calories.toFixed(2)}</b> calories/day
           </div>
           <br />
           <div>
             You must ingest <b>{(calories * 0.9).toFixed(2)} </b>calories/day to
-            have a <span class="is-underlined">mild weight loss</span>
+            have a <span className="is-underlined">mild weight loss</span>
           </div>
           <br />
           <div>
             You must ingest <b>{(calories * 0.8).toFixed(2)} </b>calories/day to
-            have a <span class="is-underlined">sustantial weight loss</span>
+            have a <span className="is-underlined">sustantial weight loss</span>
           </div>
           <br />
           <div style={{ fontSize: 10 }}>

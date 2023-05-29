@@ -21,7 +21,7 @@ const Search = () => {
       }
       // Storing in the global state
       if (response.status === 200) setSearch(response.data.foods[0])
-    }, 700),
+    }, 900),
     []
   )
 

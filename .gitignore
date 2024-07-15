@@ -6,4 +6,4 @@ BACKEND/.env
 FRONT/cypress/downloads
 FRONT/cypress/videos
 BACKEND/node_modules
-FORNT/node_modules
+FRONT/node_modules

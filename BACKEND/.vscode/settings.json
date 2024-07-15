@@ -1,0 +1,5 @@
+{
+  "editor.guides.indentation": true,
+  "eslint.alwaysShowStatus": true,
+  "eslint.format.enable": true
+}

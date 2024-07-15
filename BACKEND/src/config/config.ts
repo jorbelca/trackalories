@@ -1,12 +1,12 @@
-import * as dotenv from "dotenv"
-import { Secret } from "jsonwebtoken"
-import { resolve } from "path"
+import * as dotenv from 'dotenv'
+import { Secret } from 'jsonwebtoken'
+import { resolve } from 'path'
 
-dotenv.config({ path: resolve(__dirname, "../../.env") })
+dotenv.config({ path: resolve(__dirname, '../../.env') })
 
 export let PORT: Number | string | undefined
 export let MONGO: String | undefined
-if (process.env.NODE_ENV === "test") {
+if (process.env.NODE_ENV === 'test') {
   MONGO = process.env.MONGO_URI_TEST
   PORT = process.env.PORT_TEST
 } else {

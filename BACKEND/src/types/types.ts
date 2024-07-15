@@ -3,7 +3,7 @@ export interface User {
   email: String
   password: String
   height: Number
-  weight: Weight[] | String | Number | any,
+  weight: Weight[] | String | Number | any
   sex: Sex
   activity: Number
   birthdate: Date

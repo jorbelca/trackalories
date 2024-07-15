@@ -17,7 +17,6 @@ const tokenExtractor = (request: any, response: any, next: any) => {
     return response.status(401).json({ error: 'Token missing, invalid or timed out' })
   }
 
-
   if (!decodedToken || !decodedToken.id) {
     return response.status(401).json({ error: 'Token missing or invalid' })
   }

@@ -15,8 +15,6 @@ personalRouter.get('/', tokenExtractor, async (request, response) => {
   }
   const { username, email, activity, height, weight, birthdate, sex } = returnedUser
 
-
-
   try {
     return response.status(200).json({
       username: username,
@@ -35,7 +33,6 @@ personalRouter.get('/', tokenExtractor, async (request, response) => {
 
 personalRouter.put('/', tokenExtractor, async (request, response) => {
   let { userID, username, email, password, activity } = request.body
-
 
   const returnedUser: any = await User.findById(userID)
 

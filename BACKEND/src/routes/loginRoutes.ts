@@ -9,9 +9,13 @@ const loginRouter = express.Router()
 loginRouter.post('/', async (request, response) => {
   const { email, password } = request.body
 
-  const returnedUser: any = await User.find({ email: email })
+  const returnedUser = await User.find({ email: email })
 
-  if (returnedUser.length === 0 || !returnedUser || returnedUser === undefined) {
+  if (
+    returnedUser.length === 0 ||
+    !returnedUser ||
+    returnedUser === undefined
+  ) {
     return response.status(404).json({ error: 'No data in the DB' })
   }
 

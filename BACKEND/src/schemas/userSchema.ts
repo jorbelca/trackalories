@@ -30,6 +30,6 @@ userSchema.set('toJSON', {
 })
 userSchema.plugin(uniqueValidator)
 // eslint-disable-next-line
-const User = model<User>('User', userSchema)
+const User = model<User>("User", userSchema);
 
 export default User

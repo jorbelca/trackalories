@@ -1,20 +1,20 @@
-import express from "express"
-import Entry from "../schemas/entrySchema"
-import User from "../schemas/userSchema"
-import tokenExtractor from "../utils/tokenExtractor"
+import express from 'express'
+import Entry from '../schemas/entrySchema'
+import User from '../schemas/userSchema'
+import tokenExtractor from '../utils/tokenExtractor'
 
 const mealsRouter = express.Router()
 
-mealsRouter.get("/", tokenExtractor, async (request, response) => {
+mealsRouter.get('/', tokenExtractor, async (request, response) => {
   const { userID } = request.body
   const meals = await Entry.find({ user: userID })
     .sort({ date: -1 })
-    .populate("user", { username: 1 })
+    .populate('user', { username: 1 })
 
   response.status(200).json(meals)
 })
 
-mealsRouter.post("/", tokenExtractor, async (request, response) => {
+mealsRouter.post('/', tokenExtractor, async (request, response) => {
   const { date, userID, data } = request.body
 
   const meal: any = await Entry.find({ date: date, user: userID })
@@ -32,21 +32,21 @@ mealsRouter.post("/", tokenExtractor, async (request, response) => {
 
   const mealEntry = new Entry({
     ...request.body,
-    user: userID,
-  });
+    user: userID
+  })
 
-  const user: any = await User.findById(userID);
+  const user: any = await User.findById(userID)
 
-  user.entries = user.entries.concat(mealEntry._id);
+  user.entries = user.entries.concat(mealEntry._id)
   try {
-    await mealEntry.save();
-    await user.save();
+    await mealEntry.save()
+    await user.save()
 
-    return response.status(200).json(mealEntry);
+    return response.status(200).json(mealEntry)
   } catch (error) {
-    console.log(error);
-    return response.status(400);
+    console.log(error)
+    return response.status(400)
   }
-});
+})
 
-export default mealsRouter;
+export default mealsRouter

@@ -7,15 +7,12 @@ const weightRouter = express.Router()
 weightRouter.get('/', tokenExtractor, async (request, response) => {
   const { userID } = request.body
 
-
   const returnedUser: any = await User.findById(userID)
   if (!returnedUser || returnedUser === undefined || returnedUser === null) {
     return response.status(404).json({ error: 'No User' })
   }
 
-
   const weight = returnedUser.weight
-
 
   try {
     return response.status(200).json(weight)

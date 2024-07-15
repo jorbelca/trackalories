@@ -1,0 +1,25 @@
+{
+  "short_name": "Trackalories",
+  "name": "Trackalories",
+  "icons": [
+    {
+      "src": "assets/calories-icon-4.jpg",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/jpg"
+    },
+    {
+      "src": "assets/calories-icon-4.jpg",
+      "type": "image/jpg",
+      "sizes": "192x192"
+    },
+    {
+      "src": "assets/calories-icon-4.jpg",
+      "type": "image/jpg",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#00d1b2",
+  "background_color": "#fff"
+}

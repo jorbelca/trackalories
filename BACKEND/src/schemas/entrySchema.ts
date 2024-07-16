@@ -4,10 +4,13 @@ import { Entry } from '../types/types'
 const entrySchema = new Schema<Entry>({
   date: { type: String, required: true },
   data: { type: [], required: true },
-  user: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  }]
+  user: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true
+    }
+  ]
 })
 
 entrySchema.set('toJSON', {
@@ -18,6 +21,6 @@ entrySchema.set('toJSON', {
   }
 })
 // eslint-disable-next-line
-const Entry = model('Entry', entrySchema)
+const Entry = model("Entry", entrySchema);
 
 export default Entry

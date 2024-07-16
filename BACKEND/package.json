@@ -42,13 +42,5 @@
     "mongoose-unique-validator": "^5.0.1",
     "only": "^0.0.2",
     "package-lock": "^1.0.3"
-  },
-  "eslintConfig": {
-    "parserOptions": {
-      "project": "./tsconfig.json"
-    },
-    "extends": [
-      "./node_modules/ts-standard/eslintrc.json"
-    ]
   }
 }

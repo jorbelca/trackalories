@@ -7,7 +7,7 @@ const userSchema = new Schema<User>({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   height: { type: Number, required: true },
-  weight: { type: [], required: true },
+  weight: { type: mongoose.Schema.Types.Mixed, required: true },
   activity: { type: Number, required: true },
   sex: { type: String, required: true },
   birthdate: { type: Date, required: true },
@@ -24,7 +24,6 @@ userSchema.set('toJSON', {
     returnedObject.id = returnedObject._id.toString()
     delete returnedObject._id
     delete returnedObject.__v
-
     delete returnedObject.password
   }
 })

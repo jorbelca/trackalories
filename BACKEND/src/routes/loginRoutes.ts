@@ -9,7 +9,7 @@ const loginRouter = express.Router()
 loginRouter.post('/', async (request, response) => {
   const { email, password } = request.body
 
-  const returnedUser = await User.find({ email: email })
+  const returnedUser = await User.find({ email })
 
   if (
     returnedUser.length === 0 ||
@@ -27,7 +27,7 @@ loginRouter.post('/', async (request, response) => {
     return response.status(400).send('Wrong password')
   } else {
     passwordCorrect = true
-    await bcrypt.compare(password, user.password)
+    bcrypt.compare(password, user.password.toString())
   }
 
   let userToken: any

@@ -2,19 +2,31 @@
   "name": "trackalories",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "engines": {
     "node": "18.19.1",
     "npm": "10.2.4"
   },
+  "scripts": {
+    "start": "vite",
+    "build": "tsc -b && vite build",
+    "serve": "vite preview",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "css-build": "node-sass --omit-source-map-url  src/sass/mystyles.scss src/App.css",
+    "css-watch": "npm run css-build -- --watch",
+    "css-start": "npm run css-watch",
+    "cypress": "REACT_APP_TEST='true' npm start & cypress open",
+    "cypress:headless": "REACT_APP_TEST='true' npm start & cypress run --headed",
+    "stop": "killall node"
+  },
   "dependencies": {
     "@svgr/plugin-svgo": "^6.1.2",
     "@svgr/webpack": "^6.1.2",
-    "@vitejs/plugin-react": "^4.3.1",
     "axios": "^1.3.4",
     "nth-check": "^2.1.1",
     "postcss": "^8.4.39",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-router-dom": "^6.8.2",
     "resolve-url-loader": "^5.0.0",
     "svgo": "^2.8.0",
@@ -23,6 +35,28 @@
     "web-vitals": "^3.1.1",
     "zustand": "^4.3.6"
   },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.2.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/node": "^20.14.11",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^7.15.0",
+    "@typescript-eslint/parser": "^7.15.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "bulma": "^0.9.4",
+    "cypress": "^13.13.0",
+    "cypress-localstorage-commands": "^2.2.2",
+    "eslint": "^8.57.0",
+    "eslint-plugin-cypress": "^2.12.1",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.7",
+    "prettier": "^2.6.2",
+    "typescript": "^5.2.2",
+    "vite": "^5.3.4",
+    "vite-plugin-html": "^3.2.2"
+  },
   "resolutions": {
     "nth-check": "^2.0.1",
     "postcss": "^8.4.31",
@@ -30,17 +64,6 @@
     "css-select": "^4.1.0",
     "loader-utils": "^2.0.4",
     "resolve-url-loader": "^5.0.0"
-  },
-  "scripts": {
-    "start": "vite start",
-    "build": "vite build",
-    "lint": "eslint . --fix",
-    "css-build": "node-sass --omit-source-map-url  src/sass/mystyles.scss src/App.css",
-    "css-watch": "npm run css-build -- --watch",
-    "css-start": "npm run css-watch",
-    "cypress": "REACT_APP_TEST='true' npm start & cypress open",
-    "cypress:headless": "REACT_APP_TEST='true' npm start & cypress run --headed",
-    "stop": "killall node"
   },
   "eslintConfig": {
     "extends": [
@@ -60,15 +83,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.2.0",
-    "@testing-library/user-event": "^13.5.0",
-    "bulma": "^0.9.4",
-    "cypress": "^13.13.0",
-    "cypress-localstorage-commands": "^2.2.2",
-    "eslint-plugin-cypress": "^2.12.1",
-    "prettier": "^2.6.2"
   }
 }

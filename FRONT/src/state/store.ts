@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 
-let mealStoreIn = (set) => ({
+let mealStoreIn = (set: any) => ({
   meals: [],
   setMeal: (newMeal) =>
     set((state) => ({

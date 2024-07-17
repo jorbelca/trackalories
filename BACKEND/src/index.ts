@@ -5,22 +5,22 @@ import registerRouter from "./routes/registerRoutes";
 import mealsRouter from "./routes/mealsRoutes";
 import weightRouter from "./routes/weightRoutes";
 import personalRouter from "./routes/personalRoutes";
-import cors from "cors";
 import { connect } from "mongoose";
-
+var cors = require("cors");
 import pingRouter from "./routes/pingRoutes";
 import eliminateUserRouter from "./routes/eliminateUserRoutes";
 import clearRouter from "./routes/clearRouter";
 
+const app = express();
+
 const corsOptions = {
-  origin: ["https://trackalories.vercel.app", "http://localhost:3000"],
-  optionsSuccessStatus: 200,
+  origin: ["http://localhost:5173", "http://localhost:3000"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept"],
+  credentials: true,
 };
 
-const app = express();
-// app.options("*", cors (corsOptions:CorsOptions))
 app.use(cors(corsOptions));
-
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 

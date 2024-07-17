@@ -1,7 +1,7 @@
 import axios from "axios";
 import { NUTRITION_API_URL, X_APP_ID, X_APP_KEY } from "../config/envConfig";
 
-const searchService = async (search) => {
+const searchService = async (search: string) => {
   const config = {
     method: "POST",
     headers: {

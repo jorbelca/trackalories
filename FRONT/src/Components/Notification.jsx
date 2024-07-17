@@ -1,4 +1,3 @@
-import React from "react";
 import { notificationStore } from "../state/store";
 
 const Notification = () => {

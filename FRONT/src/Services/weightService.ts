@@ -1,10 +1,10 @@
 import axios from "axios";
-import { BACKEND_API_URL } from "../config/envConfig";
+import { VITE_API_URL } from "../config/envConfig";
 import getCompleteDate from "./completeDate";
 import { setHeader } from "./setHeaderToken";
-const baseUrl = `${BACKEND_API_URL}/api/weight`;
+const baseUrl = `${VITE_API_URL}/api/weight`;
 
-const setPermanentWeights = async (data, token) => {
+const setPermanentWeights = async (data: Array<any>, token: string) => {
   const weightEntry = {
     date: getCompleteDate(),
     weight: data,
@@ -12,7 +12,6 @@ const setPermanentWeights = async (data, token) => {
 
   try {
     const response = await axios.post(baseUrl, weightEntry, {
-      mode: "cors",
       headers: {
         Authorization: setHeader(token),
         "Content-Type": "application/json; charset=UTF-8 ",
@@ -27,10 +26,9 @@ const setPermanentWeights = async (data, token) => {
   }
 };
 
-const getPermanentWeights = async (token) => {
+const getPermanentWeights = async (token: string) => {
   try {
     const response = await axios.get(baseUrl, {
-      mode: "cors",
       headers: {
         Authorization: setHeader(token),
         "Content-Type": "application/json; charset=UTF-8 ",

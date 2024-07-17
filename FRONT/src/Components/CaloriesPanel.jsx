@@ -1,44 +1,44 @@
-import React from "react"
-import { useNavigate } from "react-router-dom"
-import { userStore } from "../state/store"
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { userStore } from "../state/store";
 
 const CaloriesPanel = () => {
-  const navigate = useNavigate()
-  const user = userStore((state) => state.user)
-  if (Object.values(user).length === 0) return navigate("/")
+  const navigate = useNavigate();
+  const user = userStore((state) => state.user);
+  if (Object.values(user).length === 0) return navigate("/");
 
-  let age = 30
-  let calories
-  let lastWeight
+  let age = 30;
+  let calories;
+  let lastWeight;
 
   if (user !== undefined && user.weight !== undefined)
-    lastWeight = user.weight[user.weight.length - 1].weight
+    lastWeight = user.weight[user.weight.length - 1].weight;
   if (user.sex === "male") {
-    calories = lastWeight * 10 + 6 * user.height - age * 5 + 5
+    calories = lastWeight * 10 + 6 * user.height - age * 5 + 5;
   } else {
-    calories = lastWeight * 10 + 6 * user.height - age * 5 - 161
+    calories = lastWeight * 10 + 6 * user.height - age * 5 - 161;
   }
   switch (user.activity) {
     case 1:
-      calories = calories * 1.2
-      break
+      calories = calories * 1.2;
+      break;
     case 2:
-      calories = calories * 1.375
-      break
+      calories = calories * 1.375;
+      break;
     case 3:
-      calories = calories * 1.45
-      break
+      calories = calories * 1.45;
+      break;
     case 4:
-      calories = calories * 1.67
-      break
+      calories = calories * 1.67;
+      break;
     case 5:
-      calories = calories * 1.81
-      break
+      calories = calories * 1.81;
+      break;
     case 6:
-      calories = calories * 1.95
-      break
+      calories = calories * 1.95;
+      break;
     default:
-      return calories
+      return calories;
   }
 
   return (
@@ -83,10 +83,10 @@ const CaloriesPanel = () => {
         </article>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default CaloriesPanel
+export default CaloriesPanel;
 
 //   Mifflin-St Jeor Equation:
 // For men:

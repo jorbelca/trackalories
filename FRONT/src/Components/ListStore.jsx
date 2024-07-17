@@ -1,45 +1,45 @@
-import React from "react"
-import { storeMealService } from "../Services/storeMealsService"
-import { mealStore, notificationStore } from "../state/store"
+import React from "react";
+import { storeMealService } from "../Services/storeMealsService";
+import { mealStore, notificationStore } from "../state/store";
 
 const ListStore = () => {
-  const setNotification = notificationStore((state) => state.setNotifications)
+  const setNotification = notificationStore((state) => state.setNotifications);
 
-  const meals = mealStore((state) => state.meals)
-  const removeMeal = mealStore((state) => state.removeMeal)
-  const resetSearchedMeals = mealStore((state) => state.resetSearchedMeals)
+  const meals = mealStore((state) => state.meals);
+  const removeMeal = mealStore((state) => state.removeMeal);
+  const resetSearchedMeals = mealStore((state) => state.resetSearchedMeals);
 
-  const token = window.localStorage.getItem("loggedUser")
+  const token = window.localStorage.getItem("loggedUser");
 
-  let totalCal = 0
-  let totalProt = 0
-  let totalCarbs = 0
-  let totalFats = 0
+  let totalCal = 0;
+  let totalProt = 0;
+  let totalCarbs = 0;
+  let totalFats = 0;
   meals.forEach((meal) => {
-    totalProt += meal.nf_protein
-    totalCal += meal.nf_calories
-    totalCarbs += meal.nf_total_carbohydrate
-    totalFats += meal.nf_total_fat
-  })
+    totalProt += meal.nf_protein;
+    totalCal += meal.nf_calories;
+    totalCarbs += meal.nf_total_carbohydrate;
+    totalFats += meal.nf_total_fat;
+  });
 
   const handleSave = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
     if (
       window.confirm(
         "You're going to save the meals, and won't be able to modify them. The information is correct? "
       )
     ) {
-      const response = await storeMealService(meals, token)
-      resetSearchedMeals()
+      const response = await storeMealService(meals, token);
+      resetSearchedMeals();
 
       if (response.status !== 200) {
-        return setNotification({ error: response.response.data.message })
+        return setNotification({ error: response.response.data.message });
       }
       if (response.status === 200) {
-        return setNotification({ message: response.statusText })
+        return setNotification({ message: response.statusText });
       }
     }
-  }
+  };
 
   return (
     <>
@@ -125,8 +125,8 @@ const ListStore = () => {
             >
               <button
                 onClick={(e) => {
-                  e.preventDefault()
-                  removeMeal(meal.id)
+                  e.preventDefault();
+                  removeMeal(meal.id);
                 }}
                 className="button button-remove"
               >
@@ -182,8 +182,8 @@ const ListStore = () => {
           <div className="media-right">
             <button
               onClick={(e) => {
-                e.preventDefault()
-                resetSearchedMeals()
+                e.preventDefault();
+                resetSearchedMeals();
               }}
               className="button is-danger is-normal is-responsive"
             >
@@ -195,7 +195,7 @@ const ListStore = () => {
         <></>
       )}
     </>
-  )
-}
+  );
+};
 
-export default ListStore
+export default ListStore;

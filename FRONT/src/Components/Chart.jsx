@@ -1,5 +1,5 @@
-import React from "react"
-import { VictoryLine, VictoryChart, VictoryAxis } from "victory"
+import React from "react";
+import { VictoryLine, VictoryChart, VictoryAxis } from "victory";
 
 const Chart = ({ data }) => {
   return (
@@ -36,7 +36,7 @@ const Chart = ({ data }) => {
         />
       </VictoryChart>
     </div>
-  )
-}
+  );
+};
 
-export default Chart
+export default Chart;

@@ -1,42 +1,42 @@
-import React, { useState } from "react"
-import { useNavigate } from "react-router-dom"
-import Bar from "../Components/Bar"
-import Footer from "../Components/Footer"
-import loginService from "../Services/loginService"
-import { notificationStore, userStore } from "../state/store"
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Bar from "../Components/Bar";
+import Footer from "../Components/Footer";
+import loginService from "../Services/loginService";
+import { notificationStore, userStore } from "../state/store";
 
 function Login() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const setNotification = notificationStore((state) => state.setNotifications)
-  const setUser = userStore((state) => state.setUser)
+  const setNotification = notificationStore((state) => state.setNotifications);
+  const setUser = userStore((state) => state.setUser);
 
   const handleSubmit = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
     const userLog = {
       email: email,
       password: password,
-    }
+    };
 
     // Service for login the user
-    const response = await loginService(userLog)
+    const response = await loginService(userLog);
 
     // Handle errors
     if (response.status !== 200) {
-      setNotification({ error: response.message })
-      return setNotification({ error: response.response.data.error })
+      setNotification({ error: response.message });
+      return setNotification({ error: response.response.data.error });
     }
 
     if (response.status === 200) {
-      setUser(response.data)
-      window.localStorage.setItem("loggedUser", response.data.token)
-      setNotification({ message: "Welcome!" })
-      navigate("/search", { replace: true })
+      setUser(response.data);
+      window.localStorage.setItem("loggedUser", response.data.token);
+      setNotification({ message: "Welcome!" });
+      navigate("/search", { replace: true });
     }
-  }
+  };
 
   return (
     <>
@@ -99,7 +99,7 @@ function Login() {
       </div>
       <Footer />
     </>
-  )
+  );
 }
 
-export default Login
+export default Login;

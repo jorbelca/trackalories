@@ -1,13 +1,13 @@
-import React from "react"
-import { notificationStore } from "../state/store"
+import React from "react";
+import { notificationStore } from "../state/store";
 
 const Notification = () => {
   const removeNotifications = notificationStore(
     (state) => state.removeNotifications
-  )
-  const notifications = notificationStore((state) => state.notifications)
+  );
+  const notifications = notificationStore((state) => state.notifications);
 
-  if (notifications.length > 0) setTimeout(() => removeNotifications(), 3000)
+  if (notifications.length > 0) setTimeout(() => removeNotifications(), 3000);
   /*eslint-disable eqeqeq*/
   return (
     <>
@@ -33,7 +33,7 @@ const Notification = () => {
         )}
       </>
     </>
-  )
-}
+  );
+};
 
-export default Notification
+export default Notification;

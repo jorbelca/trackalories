@@ -1,13 +1,13 @@
-import { useState } from "react"
-import InfoMeals from "./InfoMeals"
+import { useState } from "react";
+import InfoMeals from "./InfoMeals";
 
 const Dropdown = ({ data }) => {
-  const [isActive, setActive] = useState(true)
-  const { date } = data
+  const [isActive, setActive] = useState(true);
+  const { date } = data;
 
   const handleActive = () => {
-    setActive(!isActive)
-  }
+    setActive(!isActive);
+  };
   return (
     <>
       <div
@@ -76,7 +76,7 @@ const Dropdown = ({ data }) => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Dropdown
+export default Dropdown;

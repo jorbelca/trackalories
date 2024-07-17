@@ -1,55 +1,55 @@
-import React, { useState, useEffect } from "react"
-import Bar from "../Components/Bar"
-import Chart from "../Components/Chart"
-import { notificationStore, userStore } from "../state/store"
+import React, { useState, useEffect } from "react";
+import Bar from "../Components/Bar";
+import Chart from "../Components/Chart";
+import { notificationStore, userStore } from "../state/store";
 import {
   getPermanentWeights,
   setPermanentWeights,
-} from "../Services/weightService"
-import CaloriesPanel from "../Components/CaloriesPanel"
-import Footer from "../Components/Footer"
+} from "../Services/weightService";
+import CaloriesPanel from "../Components/CaloriesPanel";
+import Footer from "../Components/Footer";
 
 const Weight = () => {
-  const [formWeight, setFormWeight] = useState()
-  const [weights, setWeights] = useState([])
+  const [formWeight, setFormWeight] = useState();
+  const [weights, setWeights] = useState([]);
 
-  const setNotification = notificationStore((state) => state.setNotifications)
-  const setUserWeight = userStore((state) => state.setUserWeight)
+  const setNotification = notificationStore((state) => state.setNotifications);
+  const setUserWeight = userStore((state) => state.setUserWeight);
 
-  const token = window.localStorage.getItem("loggedUser")
+  const token = window.localStorage.getItem("loggedUser");
 
   useEffect(() => {
     const find = async (token) => {
-      const response = await getPermanentWeights(token)
+      const response = await getPermanentWeights(token);
 
       if (response.status !== 200 || response.message === "Network Error") {
-        setNotification({ error: response.statusText })
+        setNotification({ error: response.statusText });
 
-        return setNotification({ error: response.message })
+        return setNotification({ error: response.message });
       }
 
-      setWeights(response.data)
-    }
+      setWeights(response.data);
+    };
 
-    find(token)
+    find(token);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
   const handleSubmit = async (event) => {
-    event.preventDefault()
-    const response = await setPermanentWeights(+formWeight, token)
+    event.preventDefault();
+    const response = await setPermanentWeights(+formWeight, token);
 
     if (response.status !== 200) {
-      setNotification({ error: response.message })
-      return setNotification({ error: response.response.data.error })
+      setNotification({ error: response.message });
+      return setNotification({ error: response.response.data.error });
     }
     if (response.status === 200) {
-      setWeights(response.data.weight)
-      setUserWeight(response.data)
-      setFormWeight("")
-      return setNotification({ message: response.statusText })
+      setWeights(response.data.weight);
+      setUserWeight(response.data);
+      setFormWeight("");
+      return setNotification({ message: response.statusText });
     }
-  }
+  };
 
   return (
     <>
@@ -94,7 +94,7 @@ const Weight = () => {
       <Chart data={weights} />
       <Footer />
     </>
-  )
-}
+  );
+};
 
-export default Weight
+export default Weight;

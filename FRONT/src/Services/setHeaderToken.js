@@ -1,3 +1,3 @@
 export const setHeader = (token) => {
-  return `Bearer ${token}`
-}
+  return `Bearer ${token}`;
+};

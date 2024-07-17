@@ -1,7 +1,7 @@
-import axios from "axios"
-import { BACKEND_API_URL } from "../config/envConfig"
-import { setHeader } from "./setHeaderToken"
-const baseUrl = `${BACKEND_API_URL}/api/eliminate`
+import axios from "axios";
+import { BACKEND_API_URL } from "../config/envConfig";
+import { setHeader } from "./setHeaderToken";
+const baseUrl = `${BACKEND_API_URL}/api/eliminate`;
 
 const eliminateUser = async (token) => {
   try {
@@ -13,13 +13,13 @@ const eliminateUser = async (token) => {
         Accept: "application/json",
         "Access-Control-Allow-Origin": "*",
       },
-    })
+    });
 
-    return response
+    return response;
   } catch (error) {
-    console.error(error)
-    return error
+    console.error(error);
+    return error;
   }
-}
+};
 
-export default eliminateUser
+export default eliminateUser;

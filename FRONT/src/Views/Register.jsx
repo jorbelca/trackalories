@@ -1,46 +1,46 @@
-import React, { useState } from "react"
-import { useNavigate } from "react-router-dom"
-import Bar from "../Components/Bar"
-import Footer from "../Components/Footer"
-import getCompleteDate from "../Services/completeDate"
-import registerService from "../Services/registerService"
-import { notificationStore } from "../state/store"
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Bar from "../Components/Bar";
+import Footer from "../Components/Footer";
+import getCompleteDate from "../Services/completeDate";
+import registerService from "../Services/registerService";
+import { notificationStore } from "../state/store";
 
 const Register = () => {
-  const [username, setUsername] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [birthdate, setBirthdate] = useState("")
-  const [height, setHeight] = useState("")
-  const [weight, setWeight] = useState("")
-  const [sex, setSex] = useState("")
-  const [activity, setActivity] = useState("")
-  const [checkbox, setCheckBox] = useState(false)
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [birthdate, setBirthdate] = useState("");
+  const [height, setHeight] = useState("");
+  const [weight, setWeight] = useState("");
+  const [sex, setSex] = useState("");
+  const [activity, setActivity] = useState("");
+  const [checkbox, setCheckBox] = useState(false);
 
-  const setNotification = notificationStore((state) => state.setNotifications)
+  const setNotification = notificationStore((state) => state.setNotifications);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
     if (checkbox === false)
       return setNotification({
         error: "You must accept the terms and conditions",
-      })
+      });
     if (weight < 30 || weight > 250)
-      return setNotification({ error: "Incorrect weight" })
+      return setNotification({ error: "Incorrect weight" });
     if (height < 50 || weight > 250)
-      return setNotification({ error: "Incorrect height" })
+      return setNotification({ error: "Incorrect height" });
     if (birthdate < "1920-01-02" || birthdate > getCompleteDate())
-      return setNotification({ error: "Incorrect birthdate" })
+      return setNotification({ error: "Incorrect birthdate" });
     if (username.length < 3 || username.length > 12)
       return setNotification({
         error: "Username must contain between 3 and 12 caracters",
-      })
+      });
     if (password.length < 3 || password.length > 12)
       return setNotification({
         error: "Password must contain between 3 and 12 caracters",
-      })
+      });
     const user = {
       username: username,
       email: email,
@@ -50,35 +50,35 @@ const Register = () => {
       weight: [{ date: getCompleteDate(), weight: Number(weight) }],
       sex: sex,
       activity: Number(activity),
-    }
+    };
 
     // Service for registration
-    const response = await registerService(user)
+    const response = await registerService(user);
 
     // Handle errors
     if (response.status !== 200) {
       if (response.response.data === undefined)
-        setNotification({ error: response.message })
-      setNotification({ error: response.response.data.message })
-      return setNotification({ error: response.response.data.error })
+        setNotification({ error: response.message });
+      setNotification({ error: response.response.data.message });
+      return setNotification({ error: response.response.data.error });
     }
     if (response.status === 200) {
-      navigate("/login")
-      setNotification({ message: response.statusText })
-      handleCancel()
+      navigate("/login");
+      setNotification({ message: response.statusText });
+      handleCancel();
     }
-  }
+  };
 
   const handleCancel = () => {
-    setUsername("")
-    setEmail("")
-    setPassword("")
-    setBirthdate("")
-    setActivity()
-    setWeight()
-    setHeight()
-    setSex()
-  }
+    setUsername("");
+    setEmail("");
+    setPassword("");
+    setBirthdate("");
+    setActivity();
+    setWeight();
+    setHeight();
+    setSex();
+  };
   return (
     <>
       <Bar />
@@ -277,9 +277,9 @@ const Register = () => {
           </div>
         </form>
       </div>
-      <Footer/>
+      <Footer />
     </>
-  )
-}
+  );
+};
 
-export default Register
+export default Register;

@@ -1,4 +1,4 @@
-import logo from "../assets/calories-icon-4.jpg"
+import logo from "../assets/calories-icon-4.jpg";
 
 const Terms = () => {
   return (
@@ -36,7 +36,7 @@ const Terms = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Terms
+export default Terms;

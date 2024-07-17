@@ -1,9 +1,9 @@
-import React from "react"
-import { mealStore, searchStore } from "../state/store"
+import React from "react";
+import { mealStore, searchStore } from "../state/store";
 
 const CardResults = () => {
-  const search = searchStore((state) => state.search)
-  const setMeal = mealStore((state) => state.setMeal)
+  const search = searchStore((state) => state.search);
+  const setMeal = mealStore((state) => state.setMeal);
 
   const {
     food_name,
@@ -13,7 +13,7 @@ const CardResults = () => {
     nf_total_fat,
     nf_protein,
     serving_weight_grams,
-  } = search
+  } = search;
 
   return (
     <>
@@ -76,8 +76,8 @@ const CardResults = () => {
           <div className="media-right mt-4">
             <button
               onClick={(e) => {
-                e.preventDefault()
-                setMeal(search)
+                e.preventDefault();
+                setMeal(search);
               }}
               className="button button-add is-normal"
             >
@@ -89,7 +89,7 @@ const CardResults = () => {
         </article>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default CardResults
+export default CardResults;

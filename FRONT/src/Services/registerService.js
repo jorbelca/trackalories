@@ -1,6 +1,6 @@
-import axios from "axios"
-import { BACKEND_API_URL } from "../config/envConfig"
-const baseUrl = `${BACKEND_API_URL}/api/register`
+import axios from "axios";
+import { BACKEND_API_URL } from "../config/envConfig";
+const baseUrl = `${BACKEND_API_URL}/api/register`;
 
 const registerService = async (credentials) => {
   try {
@@ -11,13 +11,13 @@ const registerService = async (credentials) => {
         "Content-Type": "application/json ",
         Accept: "*/*",
       },
-    })
+    });
 
-    return response
+    return response;
   } catch (error) {
-    console.error(error)
-    return error
+    console.error(error);
+    return error;
   }
-}
+};
 
-export default registerService
+export default registerService;

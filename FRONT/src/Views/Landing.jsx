@@ -1,6 +1,6 @@
-import Bar from "../Components/Bar"
-import logo from "../assets/calories-icon-4.jpg"
-import Footer from "../Components/Footer"
+import Bar from "../Components/Bar";
+import logo from "../assets/calories-icon-4.jpg";
+import Footer from "../Components/Footer";
 
 const Landing = () => {
   return (
@@ -44,7 +44,7 @@ const Landing = () => {
       </div>
       <Footer />
     </>
-  )
-}
+  );
+};
 
-export default Landing
+export default Landing;

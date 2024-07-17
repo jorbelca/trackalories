@@ -1,15 +1,15 @@
-import logo from "../assets/calories-icon-4.jpg"
-import { Link, useNavigate } from "react-router-dom"
-import { mealStore, notificationStore, userStore } from "../state/store"
-import Notification from "./Notification"
+import logo from "../assets/calories-icon-4.jpg";
+import { Link, useNavigate } from "react-router-dom";
+import { mealStore, notificationStore, userStore } from "../state/store";
+import Notification from "./Notification";
 
 const Bar = () => {
-  const notification = notificationStore((state) => state.notifications)
-  const user = userStore((state) => state.user)
-  const removeUser = userStore((state) => state.removeUser)
-  const resetSearchedMeals = mealStore((state) => state.resetSearchedMeals)
+  const notification = notificationStore((state) => state.notifications);
+  const user = userStore((state) => state.user);
+  const removeUser = userStore((state) => state.removeUser);
+  const resetSearchedMeals = mealStore((state) => state.resetSearchedMeals);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
     <>
@@ -64,10 +64,10 @@ const Bar = () => {
                     <button
                       className="icon-text button is-small button-remove pb-5"
                       onClick={() => {
-                        window.localStorage.removeItem("loggedUser")
-                        removeUser()
-                        navigate("/")
-                        resetSearchedMeals()
+                        window.localStorage.removeItem("loggedUser");
+                        removeUser();
+                        navigate("/");
+                        resetSearchedMeals();
                       }}
                     >
                       <span className="icon ">
@@ -95,9 +95,13 @@ const Bar = () => {
         </div>
       </nav>
 
-      {notification === undefined || notification.length === 0 ? <></> : <Notification />}
+      {notification === undefined || notification.length === 0 ? (
+        <></>
+      ) : (
+        <Notification />
+      )}
     </>
-  )
-}
+  );
+};
 
-export default Bar
+export default Bar;

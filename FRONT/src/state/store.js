@@ -1,5 +1,5 @@
-import { create } from "zustand"
-import { devtools, persist } from "zustand/middleware"
+import { create } from "zustand";
+import { devtools, persist } from "zustand/middleware";
 
 let mealStoreIn = (set) => ({
   meals: [],
@@ -15,7 +15,7 @@ let mealStoreIn = (set) => ({
     set(() => ({
       meals: [],
     })),
-})
+});
 
 let userStoreIn = (set) => ({
   user: {},
@@ -26,14 +26,14 @@ let userStoreIn = (set) => ({
     })),
 
   removeUser: () => {
-    set(() => ({ user: {} }))
+    set(() => ({ user: {} }));
   },
-})
+});
 
 let searchStoreIn = (set) => ({
   search: [],
   setSearch: (newSearch) => set(() => ({ search: newSearch })),
-})
+});
 
 let notificationStoreIn = (set) => ({
   notifications: [],
@@ -45,17 +45,17 @@ let notificationStoreIn = (set) => ({
     set(() => ({
       notifications: [],
     })),
-})
+});
 
-mealStoreIn = devtools(mealStoreIn)
-mealStoreIn = persist(mealStoreIn, { name: "mealsState" })
-export const mealStore = create(mealStoreIn)
+mealStoreIn = devtools(mealStoreIn);
+mealStoreIn = persist(mealStoreIn, { name: "mealsState" });
+export const mealStore = create(mealStoreIn);
 
-userStoreIn = devtools(userStoreIn)
-userStoreIn = persist(userStoreIn, { name: "userState" })
-export const userStore = create(userStoreIn)
+userStoreIn = devtools(userStoreIn);
+userStoreIn = persist(userStoreIn, { name: "userState" });
+export const userStore = create(userStoreIn);
 
-export const searchStore = create(searchStoreIn)
+export const searchStore = create(searchStoreIn);
 
-notificationStoreIn = devtools(notificationStoreIn)
-export const notificationStore = create(notificationStoreIn)
+notificationStoreIn = devtools(notificationStoreIn);
+export const notificationStore = create(notificationStoreIn);

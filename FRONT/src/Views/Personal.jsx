@@ -1,71 +1,71 @@
-import  { useState } from "react"
-import Bar from "../Components/Bar"
-import { notificationStore, userStore } from "../state/store"
-import { updatePersonalInfo } from "../Services/personalService"
-import eliminateUser from "../Services/eliminateUser"
-import { useNavigate } from "react-router-dom"
-import Footer from "../Components/Footer"
+import { useState } from "react";
+import Bar from "../Components/Bar";
+import { notificationStore, userStore } from "../state/store";
+import { updatePersonalInfo } from "../Services/personalService";
+import eliminateUser from "../Services/eliminateUser";
+import { useNavigate } from "react-router-dom";
+import Footer from "../Components/Footer";
 
 const Personal = () => {
-  const removeUser = userStore((state) => state.removeUser)
-  const user = userStore((state) => state.user)
-  const setNotification = notificationStore((state) => state.setNotifications)
+  const removeUser = userStore((state) => state.removeUser);
+  const user = userStore((state) => state.user);
+  const setNotification = notificationStore((state) => state.setNotifications);
 
-  const [username, setUsername] = useState()
-  const [email, setEmail] = useState()
-  const [password, setPassword] = useState()
-  const [activity, setActivity] = useState()
+  const [username, setUsername] = useState();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [activity, setActivity] = useState();
 
-  const navigate = useNavigate()
-  const token = window.localStorage.getItem("loggedUser")
+  const navigate = useNavigate();
+  const token = window.localStorage.getItem("loggedUser");
 
   const handleSubmit = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
 
     const data = {
       username: username || user.username,
       email: email || user.email,
       activity: activity || user.activity,
       password: password,
-    }
+    };
 
-    const response = await updatePersonalInfo(data, token)
+    const response = await updatePersonalInfo(data, token);
 
     if (response.status !== 200) {
-      setNotification({ error: response.message })
-      return setNotification({ error: response.response.data.error })
+      setNotification({ error: response.message });
+      return setNotification({ error: response.response.data.error });
     }
     if (response.status === 200) {
-      window.localStorage.removeItem("loggedUser")
-      removeUser()
-      navigate("/")
-      return setNotification({ message: response.statusText })
+      window.localStorage.removeItem("loggedUser");
+      removeUser();
+      navigate("/");
+      return setNotification({ message: response.statusText });
     }
-  }
+  };
 
   const handleEliminate = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
 
     if (
       window.confirm(
         "You're going to eliminate all the information of your profile. This action is irreversible. Want to continue?"
       )
     ) {
-      const token = window.localStorage.getItem("loggedUser")
+      const token = window.localStorage.getItem("loggedUser");
 
-      const response = await eliminateUser(token)
+      const response = await eliminateUser(token);
 
       if (response.status !== 200) {
-        return setNotification({ error: response.response.data.error })
+        return setNotification({ error: response.response.data.error });
       }
       if (response.status === 200) {
-        window.localStorage.removeItem("loggedUser")
-        removeUser()
-        navigate("/")
-        return setNotification({ message: response.statusText })
+        window.localStorage.removeItem("loggedUser");
+        removeUser();
+        navigate("/");
+        return setNotification({ message: response.statusText });
       }
     }
-  }
+  };
 
   return (
     <>
@@ -201,7 +201,7 @@ const Personal = () => {
       </div>
       <Footer />
     </>
-  )
-}
+  );
+};
 
-export default Personal
+export default Personal;

@@ -15,8 +15,8 @@
     "css-build": "node-sass --omit-source-map-url  src/sass/mystyles.scss src/App.css",
     "css-watch": "npm run css-build -- --watch",
     "css-start": "npm run css-watch",
-    "cypress": "VITE_APP_TEST='true' npm start & cypress open",
-    "cypress:headless": "VITE_APP_TEST='true' npm start & cypress run --headed",
+    "cypress": "VITE_TEST='true' npm start & cypress open",
+    "cypress:headless": "VITE_TEST='true' npm start & cypress run --headed",
     "stop": "killall node"
   },
   "dependencies": {
@@ -46,7 +46,7 @@
     "@typescript-eslint/parser": "^7.15.0",
     "@vitejs/plugin-react": "^4.3.1",
     "bulma": "^0.9.4",
-    "cypress": "^13.13.0",
+    "cypress": "^13.13.1",
     "cypress-localstorage-commands": "^2.2.2",
     "eslint": "^8.57.0",
     "eslint-plugin-cypress": "^2.12.1",

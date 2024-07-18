@@ -14,13 +14,16 @@ import clearRouter from "./routes/clearRouter";
 const app = express();
 
 const corsOptions = {
-  origin: [
-    "http://localhost:5173",
-    "http://localhost:3000",
-    "https://trackalories.vercel.app",
-  ],
+  origin: ["http://localhost:5173", "https://trackalories.vercel.app"],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept"],
+  allowedHeaders: [
+    "Origin",
+    "X-Requested-With",
+    "Content-Type",
+    "Accept",
+    "Authorization",
+    "Access-Control-Allow-Origin",
+  ],
   credentials: true,
 };
 

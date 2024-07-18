@@ -5,14 +5,18 @@ import tokenExtractor from "../utils/tokenExtractor";
 
 const mealsRouter = express.Router();
 
-mealsRouter.get("/", tokenExtractor, async (request, response) => {
-  const { userID } = request.body;
-  const meals = await Entry.find({ user: userID })
-    .sort({ date: -1 })
-    .populate("user", { username: 1 });
+mealsRouter.get(
+  "/",
+  tokenExtractor,
+  async (request: Request, response: Response) => {
+    const { userID } = request.body;
+    const meals = await Entry.find({ user: userID })
+      .sort({ date: -1 })
+      .populate("user", { username: 1 });
 
-  response.status(200).json(meals);
-});
+    response.status(200).json(meals);
+  }
+);
 
 mealsRouter.post(
   "/",

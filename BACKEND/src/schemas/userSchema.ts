@@ -1,6 +1,6 @@
-import mongoose, { Schema, model } from 'mongoose'
-import { User } from '../types/types'
-import uniqueValidator from 'mongoose-unique-validator'
+import mongoose, { Document, Schema, model } from "mongoose";
+import { User } from "../types/types";
+import uniqueValidator from "mongoose-unique-validator";
 
 const userSchema = new Schema<User>({
   username: { type: String, required: true, unique: true },
@@ -14,21 +14,21 @@ const userSchema = new Schema<User>({
   entries: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Entry'
-    }
-  ]
-})
+      ref: "Entry",
+    },
+  ],
+});
 
-userSchema.set('toJSON', {
-  transform: (_document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toString()
-    delete returnedObject._id
-    delete returnedObject.__v
-    delete returnedObject.password
-  }
-})
-userSchema.plugin(uniqueValidator)
+userSchema.set("toJSON", {
+  transform: (_document: Document, returnedObject: any) => {
+    returnedObject.id = returnedObject._id.toString();
+    delete returnedObject._id;
+    delete returnedObject.__v;
+    delete returnedObject.password;
+  },
+});
+userSchema.plugin(uniqueValidator);
 // eslint-disable-next-line
 const User = model<User>("User", userSchema);
 
-export default User
+export default User;

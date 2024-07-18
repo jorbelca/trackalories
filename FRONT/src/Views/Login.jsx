@@ -26,7 +26,8 @@ function Login() {
 
     // Handle errors
     if (response.status !== 200) {
-      return setNotification({ error: response.message });
+      console.log(response);
+      return setNotification({ error: response.response.statusText });
     }
 
     if (response.status === 200) {

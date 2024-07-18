@@ -1,7 +1,7 @@
-import { create } from "zustand";
+import { create, StateCreator } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 
-let mealStoreIn = (set: any) => ({
+let mealStoreIn: StateCreator<MealState> = (set) => ({
   meals: [],
   setMeal: (newMeal) =>
     set((state) => ({
@@ -17,25 +17,24 @@ let mealStoreIn = (set: any) => ({
     })),
 });
 
-let userStoreIn = (set) => ({
-  user: {},
+let userStoreIn: StateCreator<UserState> = (set) => ({
+  user: {} as User,
   setUser: (data) => set(() => ({ user: data })),
-  setUserWeight: ({ weight }) =>
+  setUserWeight: (weight) =>
     set((state) => ({
       user: { ...state.user, weight },
     })),
-
   removeUser: () => {
-    set(() => ({ user: {} }));
+    set(() => ({ user: {} as User }));
   },
 });
 
-let searchStoreIn = (set) => ({
+let searchStoreIn: StateCreator<SearchState> = (set) => ({
   search: [],
   setSearch: (newSearch) => set(() => ({ search: newSearch })),
 });
 
-let notificationStoreIn = (set) => ({
+let notificationStoreIn: StateCreator<NotificationState> = (set) => ({
   notifications: [],
   setNotifications: (message) =>
     set(() => ({
@@ -47,15 +46,15 @@ let notificationStoreIn = (set) => ({
     })),
 });
 
-mealStoreIn = devtools(mealStoreIn);
-mealStoreIn = persist(mealStoreIn, { name: "mealsState" });
-export const mealStore = create(mealStoreIn);
+export const mealStore = create<MealState>()(
+  persist(devtools(mealStoreIn), { name: "mealsState" })
+);
+export const userStore = create<UserState>()(
+  persist(devtools(userStoreIn), { name: "userState" })
+);
 
-userStoreIn = devtools(userStoreIn);
-userStoreIn = persist(userStoreIn, { name: "userState" });
-export const userStore = create(userStoreIn);
+export const searchStore = create<SearchState>(searchStoreIn);
 
-export const searchStore = create(searchStoreIn);
-
-notificationStoreIn = devtools(notificationStoreIn);
-export const notificationStore = create(notificationStoreIn);
+export const notificationStore = create<NotificationState>()(
+  devtools(notificationStoreIn)
+);

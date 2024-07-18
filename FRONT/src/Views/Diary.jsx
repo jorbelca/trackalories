@@ -32,11 +32,7 @@ const Diary = () => {
       <div id="dropdown-grid">
         {meals === undefined || meals.length === 0
           ? ""
-          : meals.map((meal) => (
-              <>
-                <Dropdown data={meal} />
-              </>
-            ))}
+          : meals.map((meal) => <Dropdown key={meal.date} data={meal} />)}
       </div>
       <Footer />
     </>

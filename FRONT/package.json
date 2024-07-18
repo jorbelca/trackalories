@@ -15,8 +15,8 @@
     "css-build": "node-sass --omit-source-map-url  src/sass/mystyles.scss src/App.css",
     "css-watch": "npm run css-build -- --watch",
     "css-start": "npm run css-watch",
-    "cypress": "REACT_APP_TEST='true' npm start & cypress open",
-    "cypress:headless": "REACT_APP_TEST='true' npm start & cypress run --headed",
+    "cypress": "VITE_APP_TEST='true' npm start & cypress open",
+    "cypress:headless": "VITE_APP_TEST='true' npm start & cypress run --headed",
     "stop": "killall node"
   },
   "dependencies": {

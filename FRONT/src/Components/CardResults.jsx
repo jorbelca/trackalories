@@ -1,4 +1,3 @@
-import React from "react";
 import { mealStore, searchStore } from "../state/store";
 
 const CardResults = () => {

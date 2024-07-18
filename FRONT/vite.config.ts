@@ -8,7 +8,7 @@ export default defineConfig({
   plugins: [react()],
 
   build: {
-    outDir: "../dist",
+    outDir: "../build",
     emptyOutDir: true,
   },
   resolve: {
@@ -17,13 +17,16 @@ export default defineConfig({
     },
   },
   server: {
-    proxy: {
-      "/api": {
-        target: "http://localhost:3003",
-        changeOrigin: true,
-        secure: false,
-        rewrite: (path) => path.replace(/^\/api/, "/api"),
-      },
-    },
+    proxy:
+      process.env.VITE_PRODUCTION === "true"
+        ? {}
+        : {
+            "/api": {
+              target: "http://localhost:3003",
+              changeOrigin: true,
+              secure: false,
+              rewrite: (path) => path.replace(/^\/api/, "/api"),
+            },
+          },
   },
 });

@@ -7,3 +7,5 @@ FRONT/cypress/downloads
 FRONT/cypress/videos
 BACKEND/node_modules
 FRONT/node_modules
+build
+FRONT/compiledTS

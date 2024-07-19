@@ -1,3 +1,6 @@
+import { loadEnv } from "./config/loadEnv";
+// Cargar variables de entorno
+loadEnv();
 import express from "express";
 import { MONGO, PORT } from "./config/config";
 import loginRouter from "./routes/loginRoutes";
@@ -5,7 +8,7 @@ import registerRouter from "./routes/registerRoutes";
 import mealsRouter from "./routes/mealsRoutes";
 import weightRouter from "./routes/weightRoutes";
 import personalRouter from "./routes/personalRoutes";
-import { connect } from "mongoose";
+import mongoose, { Error } from "mongoose";
 var cors = require("cors");
 import pingRouter from "./routes/pingRoutes";
 import eliminateUserRouter from "./routes/eliminateUserRoutes";
@@ -40,14 +43,19 @@ app.use("/api/meals", mealsRouter);
 app.use("/api/personal", personalRouter);
 app.use("/cleardb_test", clearRouter);
 
-connectMDB().catch((err) => console.log(err));
-
-async function connectMDB() {
+async function connectMDB(URI: string | undefined) {
   // Connect to MongoDB
-  connect(`${MONGO}`);
-  console.log("Connected To MongoDB");
+  mongoose
+    .connect(URI as string)
+    .then(() => {
+      console.log("Connected to MongoDB");
+      app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+      });
+    })
+    .catch((error: Error) => {
+      console.error("Error connecting to MongoDB:", error.message);
+    });
 }
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+connectMDB(MONGO);

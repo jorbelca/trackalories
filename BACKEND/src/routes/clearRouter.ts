@@ -6,12 +6,10 @@ const clearRouter = express.Router();
 clearRouter.post("/", async (_request: Request, response: Response) => {
   if (process.env.NODE_ENV === "test") {
     try {
-      const conn = mongoose.createConnection(`${MONGO}`);
-      const res: any = await conn.dropDatabase();
+      const connection = mongoose.createConnection(`${MONGO}`);
+      await connection.dropDatabase();
 
-      if (res === true) {
-        return response.status(200).json({ message: "Cleaned" });
-      }
+      return response.status(200).json({ message: "Cleaned" });
     } catch (e) {
       console.error(e);
       return response.status(400).json({ error: "Error cleaning database" });
@@ -20,6 +18,6 @@ clearRouter.post("/", async (_request: Request, response: Response) => {
     // Respuesta por defecto si no estás en modo test
     return response.status(400).json({ error: "Not in test environment" });
   }
-  return;
 });
+
 export default clearRouter;

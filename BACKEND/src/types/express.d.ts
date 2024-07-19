@@ -1,7 +1,4 @@
-import * as express from "express";
-import { User } from "./types.ts";
 import { Request } from "express";
-import { Express } from "express-serve-static-core";
 
 declare global {
   namespace Express {

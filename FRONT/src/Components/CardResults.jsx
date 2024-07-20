@@ -18,16 +18,14 @@ const CardResults = () => {
     <>
       <div className="card-results ">
         <article className="media">
-          <div className="media-left">
-            <p className="image is-64x64">
+          <div className="media-left" style={{ alignSelf: "flex-end" }}>
+            <figure className="image is-64x64">
               <img
                 alt="meal"
-                className="is-rounded"
+                className="is-rounded is-64x64"
                 src={`${photo.thumb}`}
-                width={64}
-                height={64}
               />
-            </p>
+            </figure>
           </div>
           <div className="media-content">
             <div className="content">
@@ -46,7 +44,8 @@ const CardResults = () => {
                   </p>
                 </div>
               </div>
-              <div className="level-item has-text-centered">
+              {/* <div className="grid"> */}
+              <div className="level-item has-text-centered ">
                 <div>
                   <p className="heading">Carbohidrates</p>
                   <p className="is-size-6-mobile has-text-weight-bold">
@@ -70,6 +69,7 @@ const CardResults = () => {
                   </p>
                 </div>
               </div>
+              {/* </div> */}
             </nav>
           </div>
           <div className="media-right mt-4">

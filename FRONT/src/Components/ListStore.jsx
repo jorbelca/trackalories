@@ -67,7 +67,7 @@ const ListStore = () => {
       {meals.map((meal) => (
         <div key={meal.id} className="card-results">
           <article className="media">
-            <figure className="media-left">
+            <figure className="media-left" style={{ alignSelf: "flex-end" }}>
               <p className="image is-64x64">
                 <img
                   alt="meal"
@@ -128,7 +128,7 @@ const ListStore = () => {
                   e.preventDefault();
                   removeMeal(meal.id);
                 }}
-                className="button button-remove"
+                className="button button-remove is-normal"
               >
                 <span className="icon ">
                   <i className="fas fa-lg fa-solid fa-circle-minus"></i>
@@ -187,7 +187,7 @@ const ListStore = () => {
               }}
               className="button is-danger is-normal is-responsive"
             >
-              Clear all
+              Clear
             </button>
           </div>
         </article>

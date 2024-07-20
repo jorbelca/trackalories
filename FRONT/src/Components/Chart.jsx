@@ -1,4 +1,3 @@
-import React from "react";
 import { VictoryLine, VictoryChart, VictoryAxis } from "victory";
 
 const Chart = ({ data }) => {

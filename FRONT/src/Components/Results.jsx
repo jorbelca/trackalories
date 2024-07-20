@@ -1,4 +1,3 @@
-import React from "react";
 import { searchStore } from "../state/store";
 import CardResults from "./CardResults";
 import ListStore from "./ListStore";

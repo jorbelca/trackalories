@@ -1,6 +1,6 @@
 export let VITE_API_URL: string | undefined;
 
-if (import.meta.env.VITE_TEST === "true") {
+if (import.meta.env.VITE_APP_TEST === "true") {
   VITE_API_URL = import.meta.env.VITE_API_URL_TEST;
 } else if (import.meta.env.VITE_PRODUCTION === "true") {
   VITE_API_URL = import.meta.env.VITE_API_URL_PRODUCTION;

@@ -7,15 +7,17 @@ export function loadEnv(): void {
     if (existsSync(envPath)) {
       const envConfig = readFileSync(envPath, "utf8");
       envConfig.split("\n").forEach((line) => {
-        const [key, value] = line.split(" = ");
-        if (key && value) {
-          process.env[key.trim()] = value.trim();
+        const match = line.match(/^([^=]+)=(.*)$/);
+        if (match) {
+          const [, key, value] = match;
+          if (key && value) {
+            process.env[key.trim()] = value.trim();
+          }
         }
       });
+      return;
     }
   } catch (error) {
     console.error(error);
   }
 }
-
-loadEnv();

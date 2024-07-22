@@ -42,44 +42,50 @@ const CaloriesPanel = () => {
 
   return (
     <>
-      <div className="card-results ">
+      <div className="card-results">
         <div className="has-text-weight-semibold" style={{ color: "#48c78e" }}>
           CaloriesPanel{" "}
         </div>
-        <article className="media-content is-size-15 has-text-justified">
-          <br />
+        <article className="media-content is-size-12 has-text-justified">
           <div>
-            For <span className="is-underlined">gaining weight</span>, you must
-            ingest <b>{(calories * 1.2).toFixed(2)} </b>
-            calories/day
-          </div>
-          <br />
-          <div>
-            For <span className="is-underlined">gaining weight mildly</span>,
-            you must ingest <b>{(calories * 1.1).toFixed(2)}</b> calories/day
-          </div>
-
-          <br />
-          <div>
-            Based on your last weight and your current level of activity your
-            calories of <span className="is-underlined">maintenance</span> are{" "}
-            <b>{calories.toFixed(2)}</b> calories/day
-          </div>
-          <br />
-          <div>
-            You must ingest <b>{(calories * 0.9).toFixed(2)} </b>calories/day to
-            have a <span className="is-underlined">mild weight loss</span>
-          </div>
-          <br />
-          <div>
-            You must ingest <b>{(calories * 0.8).toFixed(2)} </b>calories/day to
-            have a <span className="is-underlined">sustantial weight loss</span>
-          </div>
-          <br />
-          <div style={{ fontSize: 10 }}>
-            *This results are based on the Mifflin-St Jeor Equation
+            Based on your last weight and current activity level, these are your
+            calorie goals according to your weight objective.
           </div>
         </article>
+        <br />
+        <table className="table">
+          <thead>
+            <tr>
+              <th className="has-text-centered">--</th>
+              <th className="has-text-centered">-</th>
+              <th className="has-text-centered">=</th>
+              <th className="has-text-centered">+</th>
+              <th className="has-text-centered">++</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="has-background-info-lighter	">
+                {Math.floor(calories * 0.8)} kcal/day
+              </td>
+              <td className="has-background-info-light	">
+                {Math.floor(calories * 0.9)} kcal/day
+              </td>
+              <td className="has-background-grey-lighter">
+                {Math.floor(calories)} kcal/day
+              </td>
+              <td className="has-background-warning-light">
+                {Math.floor(calories * 1.1)} kcal/day
+              </td>
+              <td className="has-background-warning">
+                {Math.floor(calories * 1.2)} kcal/day
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div style={{ fontSize: 10 }}>
+          *This results are based on the Mifflin-St Jeor Equation
+        </div>
       </div>
     </>
   );

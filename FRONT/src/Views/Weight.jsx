@@ -37,16 +37,17 @@ const Weight = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const response = await setPermanentWeights(+formWeight, token);
+    const response = await setPermanentWeights(Number(formWeight), token);
 
     if (response.status !== 200) {
       setNotification({ error: response.message });
+      setFormWeight("");
       return setNotification({ error: response.response.data.error });
     }
     if (response.status === 200) {
       setWeights(response.data.weight);
       setUserWeight(response.data);
-      setFormWeight("");
+
       return setNotification({ message: response.statusText });
     }
   };
@@ -84,7 +85,7 @@ const Weight = () => {
                   ></input>
                 </div>
                 <div className="control">
-                  <button className="button is-success ">Save</button>
+                  <button className="button is-success">Save</button>
                 </div>
               </div>
             </form>

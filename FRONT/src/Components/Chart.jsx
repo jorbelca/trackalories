@@ -7,8 +7,15 @@ import {
   VictoryTooltip,
   VictoryLegend,
 } from "victory";
+import { notificationStore } from "../state/store";
 
 const Chart = ({ data }) => {
+  const setNotification = notificationStore((state) => state.setNotifications);
+  if (data.length === 1) {
+    setNotification({
+      message: "The chart only works with 2 or more data points",
+    });
+  }
   data = data.filter(
     (d) =>
       d.weight !== null &&
@@ -36,6 +43,7 @@ const Chart = ({ data }) => {
       medianData[index] = { date: date, median: weight };
     }
   }
+
   return (
     <div className="chart">
       <VictoryChart

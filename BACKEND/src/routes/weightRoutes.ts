@@ -33,16 +33,19 @@ weightRouter.post(
     const { weight, date, userID } = request.body;
 
     const user: any = await User.findById(userID);
+    if (user) {
+      if (user.weight.length > 0) {
+        const lastWeight = user.weight[user.weight.length - 1].date;
 
-    const lastWeight = user.weight[user.weight.length - 1].date;
-
-    // eslint-disable-next-line
-    if (date == lastWeight) {
-      return response
-        .status(400)
-        .json({ error: "Only one weight post per day" });
+        // eslint-disable-next-line
+        if (date == lastWeight) {
+          return response
+            .status(400)
+            .json({ error: "Only one weight post per day" });
+        }
+      }
+      user.weight = user.weight.concat({ date, weight });
     }
-    user.weight = user.weight.concat({ date, weight });
 
     try {
       await User.updateOne({ _id: userID }, { weight: user.weight });
@@ -51,7 +54,7 @@ weightRouter.post(
         .status(200)
         .json({ username: user.username, weight: user.weight });
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return response.status(400);
     }
   }

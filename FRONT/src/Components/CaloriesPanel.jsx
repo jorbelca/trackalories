@@ -1,17 +1,20 @@
 import { useNavigate } from "react-router-dom";
 import { userStore } from "../state/store";
+import { getAge } from "../utils/getAge";
 
 const CaloriesPanel = () => {
   const navigate = useNavigate();
   const user = userStore((state) => state.user);
   if (Object.values(user).length === 0) return navigate("/");
 
-  let age = 30;
+  let age = 32;
   let calories;
   let lastWeight;
 
-  if (user !== undefined && user.weight !== undefined)
+  if (user) age = getAge(user.birthdate);
+  if (user && user.weight && user.weight.length > 0) {
     lastWeight = user.weight[user.weight.length - 1].weight;
+  }
   if (user.sex === "male") {
     calories = lastWeight * 10 + 6 * user.height - age * 5 + 5;
   } else {

@@ -113,6 +113,29 @@ describe("Trackalories App", function () {
     cy.get(".dropdown-trigger").contains(date).click();
   });
 
+  it("can interact with the weight component", function () {
+    cy.window().then((win) => {
+      win.localStorage.setItem("loggedUser", token);
+    });
+
+    cy.get("i.fa-solid.fa-weight-scale").click();
+    cy.contains("The chart only works with 2 or more data points").should(
+      "be.visible"
+    );
+    cy.intercept("POST", "/api/weight").as("postPeso");
+    cy.get("input.input.is-responsive").type(70);
+    cy.contains("Save").click();
+
+    cy.wait("@postPeso").then((interception) => {
+      console.log("Response Status Code:", interception.response.statusCode);
+
+      expect(interception.response.statusCode).to.eq(400);
+      expect(interception.response.body.error).to.eq(
+        "Only one weight post per day"
+      );
+    });
+  });
+
   it("can update the email profile", function () {
     cy.window().then((win) => {
       win.localStorage.setItem("loggedUser", token);

@@ -42,6 +42,12 @@ Permite a los usuarios buscar alimentos y agregar entradas a su diario de comida
 
 ![Búsqueda](./readmeScreenshots/Search.png)
 
+#### 7. Página de seguimiento del peso
+
+Permite a los usuarios introducir el peso diario, ver el registro y un calculo de las calorias segun objetivos
+
+![Peso](./readmeScreenshots/Weight.png)
+
 ---
 
 ## Dependencias Obligatorias

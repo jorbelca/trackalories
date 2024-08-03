@@ -1,6 +1,6 @@
 // import "../node_modules/bulma/css/bulma.min.css"
 import "./App.css";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, redirect } from "react-router-dom";
 import Landing from "./Views/Landing";
 import Register from "./Views/Register";
 import Login from "./Views/Login";
@@ -38,6 +38,7 @@ function App() {
         }
         if (response.response.status === 401) {
           removeUser();
+          redirect("/login");
           return setNotification({ error: response.response.data.error });
         }
         setNotification({ error: response.statusText });

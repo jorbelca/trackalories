@@ -2,7 +2,7 @@ import { useState } from "react";
 import searchService from "../Services/searchService";
 import { notificationStore, searchStore } from "../state/store";
 import Results from "./Results";
-import useDebounce from "../Hooks/useDebounce";
+import ImageRecognition from "./ImageRecognition";
 
 const Search = () => {
   const [search, setSearchFood] = useState("");
@@ -10,17 +10,18 @@ const Search = () => {
   const setSearch = searchStore((state) => state.setSearch);
   const setNotification = notificationStore((state) => state.setNotifications);
 
-  const debouncedSearchService = useDebounce(async (search) => {
-    const response = await searchService(search);
-    setSearchFood("");
-    // Manejar errores
-    if (response.status !== 200) {
-      return setNotification({ error: response.response.data.message });
-    }
-    // Almacenar en el estado global
-    if (response.status === 200) setSearch(response.data.foods[0]);
-  }, 900);
-  
+  //debounce, not used by the image recognition implementation
+  // const debouncedSearchService = useDebounce(async (search) => {
+  //   const response = await searchService(search);
+  //   setSearchFood("");
+  //   // Manejar errores
+  //   if (response.status !== 200) {
+  //     return setNotification({ error: response.response.data.message });
+  //   }
+  //   // Almacenar en el estado global
+  //   if (response.status === 200) setSearch(response.data.foods[0]);
+  // }, 900);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -44,7 +45,7 @@ const Search = () => {
     if (e.target.value.startsWith(" ")) return;
 
     setSearchFood(e.target.value);
-    debouncedSearchService(e.target.value);
+    //debouncedSearchService(e.target.value);
   };
 
   return (
@@ -63,9 +64,12 @@ const Search = () => {
                   data-cy="search-bar"
                 />
               </div>
-              {/* <div className="control">
-                <button className="button is-success">Search</button>
-              </div> */}
+              <div className="control">
+                <button className="button is-success" type="submit">
+                  Search
+                </button>
+                <ImageRecognition />
+              </div>
             </div>
           </form>
           {/* Results of the search */}

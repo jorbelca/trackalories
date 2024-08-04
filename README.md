@@ -40,6 +40,8 @@ Permite a los nuevos usuarios registrarse en la aplicación proporcionando la in
 
 Permite a los usuarios buscar alimentos y agregar entradas a su diario de comidas.
 
+⚠️ **En desarrollo,:** Reconocimiento de imagenes por IA para identificar la comida mediante imagenes o la camara del telefono
+
 ![Búsqueda](./readmeScreenshots/Search.png)
 
 #### 7. Página de seguimiento del peso

@@ -1,53 +1,61 @@
+import { isMobileDevice } from "../utils/isMobile";
+
 const ImageRecognition = () => {
+  const mobile = isMobileDevice();
   function openInterface() {
-    if (isMobileDevice()) {
-      document.querySelector(".App").insertAdjacentHTML(
-        "beforeend",
-        `
-                    <div id="supersticial">
-                    <div id="close-btn">X</div>
-                    <h1>Captura de Fotos desde la Cámara</h1>
-                    <video id="video" width="640" height="480" autoplay></video>
-                    <button id="capture">Tomar Foto</button>
-                    <canvas id="canvas" width="640" height="480" style="display: none;"></canvas>
-                    <img id="photo" src="" alt="Foto capturada">
-                    </div>`
-      );
+    document.getElementById("supersticial").showModal();
+    document.getElementById("supersticial").style.visibility = "visible";
+    document.getElementById("close-btn").style.visibility = "visible";
+
+    if (mobile) {
       document
         .getElementById("capture")
         .addEventListener("click", capturePhoto);
-
-      window.addEventListener("load", startCamera);
-    } else {
-      document.querySelector(".App").insertAdjacentHTML(
-        "beforeend",
-        `
-                <div id="supersticial">
-                  <div id="close-btn">X</div>
-                  <h1>Elige la imagen que quieras procesar</h1>
-                  <input type="file" name="" id="" />
-                </div>`
-      );
+      startCamera();
     }
-    document.getElementById("close-btn").addEventListener("click", function () {
-      document.getElementById("supersticial").style.display = "none";
-      document.body.style.overflow = "auto";
-    });
   }
+  function closeInterface() {
+    document.getElementById("supersticial").close();
+    document.getElementById("supersticial").style.visibility = "hidden";
+    document.getElementById("close-btn").style.visibility = "hidden";
+  }
+
   return (
-    <div
-      className="button is-info icon fa-solid fa-camera"
-      onClick={() => openInterface()}
-    ></div>
+    <>
+      <div
+        className="button is-info icon fa-solid fa-camera"
+        onClick={() => openInterface()}
+      ></div>
+      {mobile ? (
+        <>
+          <dialog id="supersticial">
+            <button id="close-btn" onClick={() => closeInterface()}>
+              X
+            </button>
+            <h1>Captura de Fotos desde la Cámara</h1>
+            <video id="video" width="640" height="480" autoPlay></video>
+            <button id="capture">Tomar Foto</button>
+            <canvas
+              id="canvas"
+              width="640"
+              height="480"
+              style={{ display: "none" }}
+            ></canvas>
+            <img id="photo" src="" alt="Foto capturada" />
+          </dialog>
+        </>
+      ) : (
+        <dialog id="supersticial">
+          <button id="close-btn" onClick={() => closeInterface()}>
+            X
+          </button>
+          <h1>Elige la imagen que quieras procesar</h1>
+          <input type="file" name="" id="" />
+        </dialog>
+      )}
+    </>
   );
 };
-
-function isMobileDevice() {
-  const userAgent = navigator.userAgent.toLowerCase();
-  return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/.test(
-    userAgent
-  );
-}
 
 async function startCamera() {
   try {
@@ -65,6 +73,7 @@ function capturePhoto() {
   const video = document.getElementById("video");
   const photo = document.getElementById("photo");
   const context = canvas.getContext("2d");
+  const btnCapture = document.getElementById("capture");
 
   // Dibuja el cuadro de video en el canvas
   context.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -72,5 +81,15 @@ function capturePhoto() {
   // Convierte el contenido del canvas a una URL de datos y la asigna al elemento img
   const dataURL = canvas.toDataURL("image/png");
   photo.src = dataURL;
+  // Oculta el video y detén la transmisión
+  video.style.display = "none";
+  const stream = video.srcObject;
+  const tracks = stream.getTracks();
+  tracks.forEach((track) => track.stop());
+  video.srcObject = null;
+  btnCapture.style.display = "none";
+
+  // Muestra la foto capturada
+  photo.style.display = "block";
 }
 export default ImageRecognition;

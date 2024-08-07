@@ -1,7 +1,12 @@
+import { useState } from "react";
 import { isMobileDevice } from "../utils/isMobile";
+import useDescribeImage from "../hooks/useDescribeImage";
 
 const ImageRecognition = () => {
+  const [image, setImage] = useState(null);
+  const [result, isLoading] = useDescribeImage(image);
   const mobile = isMobileDevice();
+
   function openInterface() {
     document.getElementById("supersticial").showModal();
     document.getElementById("supersticial").style.visibility = "visible";
@@ -19,6 +24,13 @@ const ImageRecognition = () => {
     document.getElementById("supersticial").style.visibility = "hidden";
     document.getElementById("close-btn").style.visibility = "hidden";
   }
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+    }
+  };
 
   return (
     <>
@@ -50,9 +62,11 @@ const ImageRecognition = () => {
             X
           </button>
           <h1>Elige la imagen que quieras procesar</h1>
-          <input type="file" name="" id="" />
+          <input type="file" name="" id="" onChange={handleImageUpload} />
         </dialog>
-      )}
+      )}{" "}
+      {isLoading && <p>Analyzing image...</p>}
+      {result && <p>Result: {result}</p>}
     </>
   );
 };

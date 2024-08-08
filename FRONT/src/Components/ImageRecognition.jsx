@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { isMobileDevice } from "../utils/isMobile";
-import useDescribeImage from "../hooks/useDescribeImage";
+import describeImage from "../Services/describeImage";
 
 const ImageRecognition = () => {
   const [image, setImage] = useState(null);
-  const [result, isLoading] = useDescribeImage(image);
+  const [result, setResult] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const mobile = isMobileDevice();
 
   function openInterface() {
@@ -25,10 +26,19 @@ const ImageRecognition = () => {
     document.getElementById("close-btn").style.visibility = "hidden";
   }
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
+  const handleImageUpload = async (e) => {
+    const file = e.target.files?.[0];
     if (file) {
       setImage(file);
+      setIsLoading(true);
+      try {
+        const response = await describeImage(file);
+        setResult(response.data);
+      } catch (error) {
+        console.error("Error al analizar la imagen:", error);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -64,7 +74,7 @@ const ImageRecognition = () => {
           <h1>Elige la imagen que quieras procesar</h1>
           <input type="file" name="" id="" onChange={handleImageUpload} />
         </dialog>
-      )}{" "}
+      )}
       {isLoading && <p>Analyzing image...</p>}
       {result && <p>Result: {result}</p>}
     </>

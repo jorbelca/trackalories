@@ -20,7 +20,8 @@ const ImageRecognition = () => {
       startCamera();
     }
   }
-  function closeInterface() {
+  function closeInterface(e) {
+    e.preventDefault();
     document.getElementById("supersticial").close();
     document.getElementById("supersticial").style.visibility = "hidden";
     document.getElementById("close-btn").style.visibility = "hidden";
@@ -32,8 +33,11 @@ const ImageRecognition = () => {
       setImage(file);
       setIsLoading(true);
       try {
-        const response = await describeImage(file);
-        setResult(response.data);
+        let response = await describeImage(file);
+        response = response.data.result.map(
+          (res, idx) => `${idx}. ${res.label} - ${Math.round(res.score * 100)}%`
+        );
+        setResult(response);
       } catch (error) {
         console.error("Error al analizar la imagen:", error);
       } finally {
@@ -46,12 +50,12 @@ const ImageRecognition = () => {
     <>
       <div
         className="button is-info icon fa-solid fa-camera"
-        onClick={() => openInterface()}
+        onClick={(e) => openInterface(e)}
       ></div>
       {mobile ? (
         <>
           <dialog id="supersticial">
-            <button id="close-btn" onClick={() => closeInterface()}>
+            <button id="close-btn" onClick={(e) => closeInterface(e)}>
               X
             </button>
             <h1>Captura de Fotos desde la Cámara</h1>
@@ -64,19 +68,30 @@ const ImageRecognition = () => {
               style={{ display: "none" }}
             ></canvas>
             <img id="photo" src="" alt="Foto capturada" />
+            {isLoading && <p>Analyzing image...</p>}
+            {result && <p>Result:{result.map((res) => res + "\n" ?? "")}</p>}
           </dialog>
         </>
       ) : (
         <dialog id="supersticial">
-          <button id="close-btn" onClick={() => closeInterface()}>
+          <button id="close-btn" onClick={(e) => closeInterface(e)}>
             X
           </button>
-          <h1>Elige la imagen que quieras procesar</h1>
+          <h1>Choose the image you want to process</h1>
+          <br />
           <input type="file" name="" id="" onChange={handleImageUpload} />
+          {isLoading && <p>Analyzing image...</p>}
+          <br />
+          {result && (
+            <table>
+              <thead> Result:</thead>
+              <tbody>
+                <td>{result.map((res) => <tr>{res}</tr> ?? "")}</td>
+              </tbody>
+            </table>
+          )}
         </dialog>
       )}
-      {isLoading && <p>Analyzing image...</p>}
-      {result && <p>Result: {result}</p>}
     </>
   );
 };

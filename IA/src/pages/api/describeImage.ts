@@ -3,7 +3,29 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { IncomingForm } from "formidable";
 import fs from "fs";
 import path from "path";
+import Cors from "cors";
 
+// Inicializa el middleware CORS
+const cors = Cors({
+  origin: "http://localhost:5173",
+  methods: ["GET", "HEAD", "POST"],
+});
+
+// Función para manejar el middleware CORS
+function runMiddleware(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  fn: Function
+) {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result: any) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+      return resolve(result);
+    });
+  });
+}
 // Desactivar el manejo de archivos de Next.js por defecto
 export const config = {
   api: {
@@ -15,6 +37,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  await runMiddleware(req, res, cors);
   if (req.method === "POST") {
     const form = new IncomingForm({
       uploadDir: path.join(process.cwd(), "public", "uploads"),
@@ -36,7 +59,7 @@ export default async function handler(
       try {
         const result = await processImage(imageFile);
         fs.unlinkSync(imageFile); // Elimina el archivo temporal después de procesar
-        res.status(200).json({ data: result });
+        res.status(200).json({ result });
       } catch (error) {
         res.status(500).json({ error: (error as Error).message });
       }
@@ -49,10 +72,14 @@ export default async function handler(
 const processImage = async (filePath: string) => {
   try {
     const classifier = await MyClassificationPipeline.getInstance();
-    const result = await classifier(filePath, {
+    let result = await classifier(filePath, {
       topk: 5,
     });
-    return result;
+    let final: Array<any> = [];
+    result.map((res: any, idx: number) => {
+      if (res.score > 0.1) final.push(result[idx]);
+    });
+    return final;
   } catch (error) {
     console.error("Error classifying image:", error);
     throw new Error("Error classifying image");

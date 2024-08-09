@@ -109,7 +109,7 @@ button.button.button-save {
   background: red;
   padding: 10px;
   border-radius: 50%;
-  width: 45px;
+  width: 40px;
 }
 
 @media (max-width: 450px) {

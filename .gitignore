@@ -10,3 +10,5 @@ FRONT/node_modules
 build
 FRONT/compiledTS
 FRONT/build
+IA/.next
+IA/node_modules

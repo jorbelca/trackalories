@@ -43,9 +43,7 @@ const Search = () => {
 
   const handleChange = (e) => {
     if (e.target.value.startsWith(" ")) return;
-
     setSearchFood(e.target.value);
-    //debouncedSearchService(e.target.value);
   };
 
   return (
@@ -53,7 +51,7 @@ const Search = () => {
       <div className="container is-max-desktop">
         <div className="column is-mobile ">
           <form onSubmit={handleSubmit}>
-            <div className="field has-addons">
+            <div className="field has-addons" style={{ textAlign: "" }}>
               <div className="control is-expanded">
                 <input
                   className="input"
@@ -68,7 +66,7 @@ const Search = () => {
                 <button className="button is-success" type="submit">
                   Search
                 </button>
-                <ImageRecognition />
+                <ImageRecognition setSearchFood={setSearchFood} />
               </div>
             </div>
           </form>

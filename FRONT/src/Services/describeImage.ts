@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API_URL =
   process.env.NODE_ENV === "production"
-    ? "http://www.IA_helper.com"
+    ? "http://www.desribeimagewithtransformers.net"
     : "http://localhost:3000";
 const baseUrl = `${API_URL}/api/describeImage`;
 

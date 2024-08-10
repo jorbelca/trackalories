@@ -2,13 +2,14 @@ import { useState } from "react";
 import { isMobileDevice } from "../utils/isMobile";
 import describeImage from "../Services/describeImage";
 
-const ImageRecognition = () => {
+const ImageRecognition = ({ setSearchFood }) => {
   const [image, setImage] = useState(null);
   const [result, setResult] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const mobile = isMobileDevice();
 
-  function openInterface() {
+  function openInterface(e) {
+    e.preventDefault();
     document.getElementById("supersticial").showModal();
     document.getElementById("supersticial").style.visibility = "visible";
     document.getElementById("close-btn").style.visibility = "visible";
@@ -28,6 +29,7 @@ const ImageRecognition = () => {
   }
 
   const handleImageUpload = async (e) => {
+    e.preventDefault();
     const file = e.target.files?.[0];
     if (file) {
       setImage(file);
@@ -35,7 +37,7 @@ const ImageRecognition = () => {
       try {
         let response = await describeImage(file);
         response = response.data.result.map(
-          (res, idx) => `${idx}. ${res.label} - ${Math.round(res.score * 100)}%`
+          (res, idx) => `${Math.round(res.score * 100)}% -> ${res.label}`
         );
         setResult(response);
       } catch (error) {
@@ -46,28 +48,48 @@ const ImageRecognition = () => {
     }
   };
 
+  function setSearch(e, res) {
+    closeInterface(e);
+    const word = res.split("->")[1];
+    setSearchFood(word);
+  }
+
   return (
     <>
-      <div
-        className="button is-info icon fa-solid fa-camera"
-        onClick={(e) => openInterface(e)}
-      ></div>
+      <button className="button is-danger" onClick={(e) => openInterface(e)}>
+        <i className="fa-solid fa-camera"></i>
+      </button>
       {mobile ? (
         <>
           <dialog id="supersticial">
             <button id="close-btn" onClick={(e) => closeInterface(e)}>
               X
             </button>
-            <h1>Captura de Fotos desde la Cámara</h1>
+            <h1>Camera</h1>
             <video id="video" width="640" height="480" autoPlay></video>
-            <button id="capture">Tomar Foto</button>
+            <button id="capture" onClick={(e) => e.preventDefault()}>
+              Take photo
+            </button>
             <canvas
               id="canvas"
               width="640"
               height="480"
               style={{ display: "none" }}
             ></canvas>
-            <img id="photo" src="" alt="Foto capturada" />
+            <img
+              id="photo"
+              src=""
+              alt="Foto capturada"
+              style={{ display: "none" }}
+            />
+            <button
+              id="describe"
+              className="is-info"
+              onClick={(e) => handleImageUpload(e)}
+              style={{ display: "none", border: "1px solid white" }}
+            >
+              Describe image with IA
+            </button>
             {isLoading && <p>Analyzing image...</p>}
             {result && <p>Result:{result.map((res) => res + "\n" ?? "")}</p>}
           </dialog>
@@ -84,9 +106,22 @@ const ImageRecognition = () => {
           <br />
           {result && (
             <table>
-              <thead> Result:</thead>
+              <thead>
+                <tr>
+                  <th> Result:</th>
+                </tr>
+              </thead>
               <tbody>
-                <td>{result.map((res) => <tr>{res}</tr> ?? "")}</td>
+                {result.map(
+                  (res) =>
+                    (
+                      <tr key={res}>
+                        <td>
+                          <a onClick={(e) => setSearch(e, res)}>{res}</a>
+                        </td>
+                      </tr>
+                    ) ?? ""
+                )}
               </tbody>
             </table>
           )}
@@ -111,6 +146,7 @@ function capturePhoto() {
   const canvas = document.getElementById("canvas");
   const video = document.getElementById("video");
   const photo = document.getElementById("photo");
+  const btnDescribe = document.getElementById("describe");
   const context = canvas.getContext("2d");
   const btnCapture = document.getElementById("capture");
 
@@ -130,5 +166,6 @@ function capturePhoto() {
 
   // Muestra la foto capturada
   photo.style.display = "block";
+  btnDescribe.style.display = "block";
 }
 export default ImageRecognition;

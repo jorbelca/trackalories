@@ -1,6 +1,6 @@
 ## Trackalories
 
-Trackalories es una aplicación para rastrear la ingesta de calorías. El proyecto consta de un backend desarrollado en Node.js y TypeScript con MongoDB, y un frontend construido con React, TypeScript y Vite, además de ESLint en ambos.
+Trackalories es una aplicación para rastrear la ingesta de calorías. El proyecto consta de un backend desarrollado en Node.js y TypeScript con MongoDB, y un frontend construido con React, TypeScript y Vite, además de ESLint en ambos, ademas en el directorio IA hay una endpoint con una funcionalidad de descripción de imágenes (implementacion de la biblioteca transformers de Xenova).
 
 ### Funcionalidades
 
@@ -40,8 +40,6 @@ Permite a los nuevos usuarios registrarse en la aplicación proporcionando la in
 
 Permite a los usuarios buscar alimentos y agregar entradas a su diario de comidas.
 
-⚠️ **En desarrollo,:** Reconocimiento de imagenes por IA para identificar la comida mediante imagenes o la camara del telefono
-
 ![Búsqueda](./readmeScreenshots/Search.png)
 
 #### 7. Página de seguimiento del peso
@@ -50,7 +48,12 @@ Permite a los usuarios introducir el peso diario, ver el registro y un calculo d
 
 ![Peso](./readmeScreenshots/Weight.png)
 
----
+#### 8. Descripcion de imagenes por IA (Funcionalidades extra)
+
+Se elige la imagen o se hace una foto y la funcionalidad describe la imagene para poblar mas facilmente los términos de búsqueda.
+Al clicar la palabra que describe la imagen , se popula directamnte la barra de busqueda. Para Desktop y mobile
+
+## ![Describe](./readmeScreenshots/DescribeImage.png)
 
 ## Dependencias Obligatorias
 
@@ -143,7 +146,27 @@ El servidor backend debería estar corriendo en `http://localhost:PORT`.
    npm start
    ```
 
-El servidor debería estar corriendo en `http://localhost:`.
+El servidor debería estar corriendo en `http://localhost:PORT`.
+
+#### Configuración de IA
+
+1. Navega al directorio :
+
+   ```bash
+   cd IA
+   ```
+
+2. Instala las dependencias :
+
+   ```bash
+   npm install
+   ```
+
+3. Inicia el servidor :
+
+   ```bash
+   npm run dev
+   ```
 
 ### Scripts Disponibles
 
@@ -162,6 +185,10 @@ El servidor debería estar corriendo en `http://localhost:`.
 - `npm run build`: Compila la aplicación para producción.
 - `npm run cypress`: Ejecuta las pruebas e2e.
 
+#### IA
+
+- `npm run dev`: Inicia el servidor en modo desarrollo.
+
 ### Contribuciones
 
 Las contribuciones son bienvenidas. Para contribuir:
@@ -175,5 +202,9 @@ Las contribuciones son bienvenidas. Para contribuir:
 ### Licencia
 
 Este proyecto está licenciado bajo la Licencia MIT.
+
+## Créditos
+
+Este proyecto utiliza el paquete [transformers de Xenova](https://github.com/xenova/transformers) para la descripcion de imágenes.
 
 ---

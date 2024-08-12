@@ -39,13 +39,13 @@ export default async function handler(
 ) {
   await runMiddleware(req, res, cors);
   if (req.method === "POST") {
-    const uploadDir = path.join(process.cwd(), "tmp", "uploads");
+    const uploadDir = path.join("/tmp", "uploads");
 
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
     }
     const form = new IncomingForm({
-      uploadDir,
+      uploadDir: uploadDir,
       keepExtensions: true,
     });
 

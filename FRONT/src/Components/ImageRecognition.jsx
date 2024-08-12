@@ -7,6 +7,7 @@ const ImageRecognition = ({ setSearchFood }) => {
   const [result, setResult] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const mobile = isMobileDevice();
+  const [error, setError] = useState(null);
 
   function openInterface(e) {
     e.preventDefault();
@@ -26,6 +27,14 @@ const ImageRecognition = ({ setSearchFood }) => {
     document.getElementById("supersticial").close();
     document.getElementById("supersticial").style.visibility = "hidden";
     document.getElementById("close-btn").style.visibility = "hidden";
+    setImage(null);
+    setResult(null);
+    setError(null);
+    setIsLoading(false);
+    const fileInput = document.querySelector('input[type="file"]');
+    if (fileInput) {
+      fileInput.value = "";
+    }
   }
 
   const handleImageUpload = async (e) => {
@@ -34,14 +43,16 @@ const ImageRecognition = ({ setSearchFood }) => {
     if (file) {
       setImage(file);
       setIsLoading(true);
+      setError(null);
       try {
         let response = await describeImage(file);
         response = response.data.result.map(
-          (res, idx) => `${Math.round(res.score * 100)}% -> ${res.label}`
+          (res) => `${Math.round(res.score * 100)}% -> ${res.label}`
         );
         setResult(response);
       } catch (error) {
         console.error("Error al analizar la imagen:", error);
+        setError("Error analyzing the image. Please try again.");
       } finally {
         setIsLoading(false);
       }
@@ -91,6 +102,7 @@ const ImageRecognition = ({ setSearchFood }) => {
               Describe image with IA
             </button>
             {isLoading && <p>Analyzing image...</p>}
+            {error && <p style={{ color: "red" }}>{error}</p>}
             {result && <p>Result:{result.map((res) => res + "\n" ?? "")}</p>}
           </dialog>
         </>
@@ -103,6 +115,7 @@ const ImageRecognition = ({ setSearchFood }) => {
           <br />
           <input type="file" name="" id="" onChange={handleImageUpload} />
           {isLoading && <p>Analyzing image...</p>}
+          {error && <p style={{ color: "red" }}>{error}</p>}
           <br />
           {result && (
             <table>

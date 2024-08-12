@@ -50,7 +50,9 @@ export default async function handler(
         return res.status(500).json({ error: "Error al procesar el archivo" });
       }
 
-      const imageFile = files.image?.[0]?.filepath as string;
+      const imageFile = Array.isArray(files.image)
+        ? files.image[0].filepath
+        : null;
 
       if (!imageFile) {
         return res.status(400).json({ error: "No image provided" });
@@ -58,9 +60,12 @@ export default async function handler(
 
       try {
         const result = await processImage(imageFile);
-        fs.unlinkSync(imageFile); // Elimina el archivo temporal después de procesar
+        fs.unlink(imageFile, (err) => {
+          if (err) console.error("Error al eliminar el archivo temporal:", err);
+        }); // Elimina el archivo temporal después de procesar
         res.status(200).json({ result });
       } catch (error) {
+        console.error("Error classifying image:", error);
         res.status(500).json({ error: (error as Error).message });
       }
     });

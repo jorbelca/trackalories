@@ -36,9 +36,9 @@ const ImageRecognition = ({ setSearchFood }) => {
       fileInput.value = "";
     }
   }
-
   const handleImageUpload = async (e) => {
     e.preventDefault();
+
     const file = e.target.files?.[0];
     if (file) {
       setImage(file);
@@ -59,12 +59,85 @@ const ImageRecognition = ({ setSearchFood }) => {
     }
   };
 
+  function capturePhoto() {
+    const canvas = document.getElementById("canvas");
+    const video = document.getElementById("video");
+    const photo = document.getElementById("photo");
+    const btnDescribe = document.getElementById("describe");
+    const context = canvas.getContext("2d");
+    const btnCapture = document.getElementById("capture");
+
+    // Dibuja el cuadro de video en el canvas
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    // Convierte el contenido del canvas a una URL de datos y la asigna al elemento img
+    const dataURL = canvas.toDataURL("image/png");
+    photo.src = dataURL;
+
+    // Convertir el dataURL en un archivo Blob
+    fetch(dataURL)
+      .then((res) => res.blob())
+      .then((blob) => {
+        // Crea un archivo a partir del Blob
+        const file = new File([blob], "captured_image.png", {
+          type: "image/png",
+        });
+        // Ejecuta handleImageUpload con el archivo capturado
+        handleImageUpload({
+          target: { files: [file] },
+          preventDefault: () => {},
+        });
+      });
+
+    // Oculta el video y detén la transmisión
+    video.style.display = "none";
+    const stream = video.srcObject;
+    const tracks = stream.getTracks();
+    tracks.forEach((track) => track.stop());
+    video.srcObject = null;
+    btnCapture.style.display = "none";
+
+    // Muestra la foto capturada
+    photo.style.display = "block";
+    btnDescribe.style.display = "block";
+  }
+
+  async function startCamera() {
+    try {
+      // Intenta activar la cámara trasera
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { exact: "environment" } }, // Cámara trasera
+      });
+      const videoElement = document.getElementById("video");
+      videoElement.srcObject = stream;
+    } catch (error) {
+      if (error.name === "OverconstrainedError") {
+        try {
+          // Si la cámara trasera no está disponible, intenta la delantera
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: "user" }, // Cámara delantera
+          });
+          const videoElement = document.getElementById("video");
+          videoElement.srcObject = stream;
+        } catch (innerError) {
+          console.error("Error al acceder a la cámara:", innerError);
+          alert(
+            "No se puede acceder a ninguna cámara. Por favor, verifica los permisos."
+          );
+        }
+      } else {
+        console.error("Error al acceder a la cámara:", error);
+        alert(
+          "No se puede acceder a la cámara. Por favor, verifica los permisos."
+        );
+      }
+    }
+  }
   function setSearch(e, res) {
     closeInterface(e);
     const word = res.split("->")[1];
     setSearchFood(word);
   }
-
   return (
     <>
       <button className="button is-danger" onClick={(e) => openInterface(e)}>
@@ -93,17 +166,30 @@ const ImageRecognition = ({ setSearchFood }) => {
               alt="Foto capturada"
               style={{ display: "none" }}
             />
-            <button
-              id="describe"
-              className="is-info"
-              onClick={(e) => handleImageUpload(e)}
-              style={{ display: "none", border: "1px solid white" }}
-            >
-              Describe image with IA
-            </button>
+
             {isLoading && <p>Analyzing image...</p>}
             {error && <p style={{ color: "red" }}>{error}</p>}
-            {result && <p>Result:{result.map((res) => res + "\n" ?? "")}</p>}
+            {result && (
+              <table>
+                <thead>
+                  <tr>
+                    <th> Result:</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {result.map(
+                    (res) =>
+                      (
+                        <tr key={res}>
+                          <td>
+                            <a onClick={(e) => setSearch(e, res)}>{res}</a>
+                          </td>
+                        </tr>
+                      ) ?? ""
+                  )}
+                </tbody>
+              </table>
+            )}
           </dialog>
         </>
       ) : (
@@ -144,41 +230,4 @@ const ImageRecognition = ({ setSearchFood }) => {
   );
 };
 
-async function startCamera() {
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-    const videoElement = document.getElementById("video");
-    videoElement.srcObject = stream;
-  } catch (error) {
-    console.error("Error al acceder a la cámara:", error);
-    alert("No se puede acceder a la cámara. Por favor, verifica los permisos.");
-  }
-}
-
-function capturePhoto() {
-  const canvas = document.getElementById("canvas");
-  const video = document.getElementById("video");
-  const photo = document.getElementById("photo");
-  const btnDescribe = document.getElementById("describe");
-  const context = canvas.getContext("2d");
-  const btnCapture = document.getElementById("capture");
-
-  // Dibuja el cuadro de video en el canvas
-  context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-  // Convierte el contenido del canvas a una URL de datos y la asigna al elemento img
-  const dataURL = canvas.toDataURL("image/png");
-  photo.src = dataURL;
-  // Oculta el video y detén la transmisión
-  video.style.display = "none";
-  const stream = video.srcObject;
-  const tracks = stream.getTracks();
-  tracks.forEach((track) => track.stop());
-  video.srcObject = null;
-  btnCapture.style.display = "none";
-
-  // Muestra la foto capturada
-  photo.style.display = "block";
-  btnDescribe.style.display = "block";
-}
 export default ImageRecognition;

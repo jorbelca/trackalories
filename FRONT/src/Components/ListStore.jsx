@@ -32,8 +32,13 @@ const ListStore = () => {
       const response = await storeMealService(meals, token);
       resetSearchedMeals();
 
+      const errorResponse = response.response;
       if (response.status !== 200) {
-        return setNotification({ error: response.response.data.message });
+        const errorMessage =
+          errorResponse && errorResponse.data
+            ? errorResponse.data.message
+            : "An unexpected error occurred";
+        return setNotification({ error: errorMessage });
       }
       if (response.status === 200) {
         return setNotification({ message: response.statusText });

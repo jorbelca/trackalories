@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_URL =
-  process.env.NODE_ENV === "production"
+  import.meta.env.VITE_PRODUCTION === "true"
     ? "https://describeimage.vercel.app"
     : "http://localhost:3000";
 const baseUrl = `${API_URL}/api/describeImage`;

@@ -90,11 +90,11 @@ describe("Trackalories App", function () {
     });
     cy.visit(front_URL);
     cy.get(".fa-solid.fa-search").click();
-    cy.get('[data-cy="search-bar"]').type("duck");
+    cy.get('[data-cy="search-bar"]').type("duck{enter}");
     cy.contains("140 grams of duck").should("be.visible");
 
     cy.get(".button-add").click();
-    cy.get('[data-cy="search-bar"]').type("beer");
+    cy.get('[data-cy="search-bar"]').type("beer{enter}");
     cy.contains("356 grams of beer").should("be.visible");
 
     cy.get(".button-add").click();

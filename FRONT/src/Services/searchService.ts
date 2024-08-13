@@ -1,8 +1,11 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { NUTRITION_API_URL, X_APP_ID, X_APP_KEY } from "../config/envConfig";
 
-const searchService = async (search: string) => {
-  const config = {
+type SearchServiceResult = SearchServiceResponse | SearchServiceError;
+
+// Servicio de búsqueda
+const searchService = async (search: string): Promise<SearchServiceResult> => {
+  const config: AxiosRequestConfig<SearchServiceRequest> = {
     method: "POST",
     headers: {
       "content-type": "application/json",
@@ -14,11 +17,23 @@ const searchService = async (search: string) => {
   };
 
   try {
-    const response = await axios(config);
-    return response;
-  } catch (error) {
+    const response: AxiosResponse<SearchServiceResponse> = await axios(config);
+    return response.data;
+  } catch (error: any) {
     console.error(error);
-    return error;
+    // Verificar si el error es de Axios
+    if (axios.isAxiosError(error) && error.response) {
+      return {
+        status: error.response.status,
+        message: error.response.data.message || "Error en la solicitud",
+      };
+    } else {
+      // Error genérico
+      return {
+        status: 500,
+        message: "An unknown error occurred",
+      };
+    }
   }
 };
 

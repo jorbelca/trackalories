@@ -40,3 +40,19 @@ interface NotificationState {
   setNotifications: (message: Notification) => void;
   removeNotifications: () => void;
 }
+
+interface SearchServiceResponse {
+  foods: Array<{
+    name: string;
+  }>;
+}
+
+interface SearchServiceError {
+  status: number;
+  message: string;
+}
+
+interface SearchServiceRequest {
+  query: string;
+  timezone: string;
+}

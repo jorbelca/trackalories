@@ -26,24 +26,20 @@ const Search = () => {
     event.preventDefault();
 
     if (search.length === 0) {
-      return setNotification({ error: "Please introduce some value " });
+      return setNotification({ error: "Please introduce some value" });
     }
-    // Service for the search of the meal
+
+    // Llamada al servicio de búsqueda
     const response = await searchService(search);
     setSearchFood("");
 
-    // Handle errors
-    const errorResponse = response.response;
-    if (response.status !== 200) {
-      const errorMessage =
-        errorResponse && errorResponse.data
-          ? errorResponse.data.message
-          : "An unexpected error occurred";
-      return setNotification({ error: errorMessage });
+    if ("foods" in response) {
+      // Si la respuesta tiene el campo `foods`, es una respuesta exitosa
+      setSearch(response.foods[0]);
+    } else {
+      // Es un error
+      setNotification({ error: response.message });
     }
-
-    // Storing in the global state
-    if (response.status === 200) setSearch(response.data.foods[0]);
   };
 
   const handleChange = (e) => {

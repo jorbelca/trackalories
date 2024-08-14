@@ -11,10 +11,13 @@ const ImageRecognition = ({ setSearchFood }) => {
 
   function openInterface(e) {
     e.preventDefault();
-    document.getElementById("supersticial").showModal();
-    document.getElementById("supersticial").style.visibility = "visible";
-    document.getElementById("close-btn").style.visibility = "visible";
-
+    const modal = document.getElementById("supersticial");
+    const closeButton = document.getElementById("close-btn");
+    if (modal && closeButton) {
+      modal.showModal();
+      modal.style.visibility = "visible";
+      closeButton.style.visibility = "visible";
+    }
     if (mobile) {
       document
         .getElementById("capture")
@@ -40,7 +43,7 @@ const ImageRecognition = ({ setSearchFood }) => {
     e.preventDefault();
 
     const file = e.target.files?.[0];
-    if (file) {
+    if (file && file.type.startsWith("image/")) {
       setImage(file);
       setIsLoading(true);
       setError(null);
@@ -63,45 +66,47 @@ const ImageRecognition = ({ setSearchFood }) => {
     const canvas = document.getElementById("canvas");
     const video = document.getElementById("video");
     const photo = document.getElementById("photo");
-    const btnDescribe = document.getElementById("describe");
-    const context = canvas.getContext("2d");
-    const btnCapture = document.getElementById("capture");
 
-    // Dibuja el cuadro de video en el canvas
-    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    if (canvas && video && photo) {
+      const btnDescribe = document.getElementById("describe");
+      const context = canvas.getContext("2d");
+      const btnCapture = document.getElementById("capture");
 
-    // Convierte el contenido del canvas a una URL de datos y la asigna al elemento img
-    const dataURL = canvas.toDataURL("image/png");
-    photo.src = dataURL;
+      // Dibuja el cuadro de video en el canvas
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-    // Convertir el dataURL en un archivo Blob
-    fetch(dataURL)
-      .then((res) => res.blob())
-      .then((blob) => {
-        // Crea un archivo a partir del Blob
-        const file = new File([blob], "captured_image.png", {
-          type: "image/png",
+      // Convierte el contenido del canvas a una URL de datos y la asigna al elemento img
+      const dataURL = canvas.toDataURL("image/png");
+      photo.src = dataURL;
+
+      // Convertir el dataURL en un archivo Blob
+      fetch(dataURL)
+        .then((res) => res.blob())
+        .then((blob) => {
+          // Crea un archivo a partir del Blob
+          const file = new File([blob], "captured_image.png", {
+            type: "image/png",
+          });
+          // Ejecuta handleImageUpload con el archivo capturado
+          handleImageUpload({
+            target: { files: [file] },
+            preventDefault: () => {},
+          });
         });
-        // Ejecuta handleImageUpload con el archivo capturado
-        handleImageUpload({
-          target: { files: [file] },
-          preventDefault: () => {},
-        });
-      });
 
-    // Oculta el video y detén la transmisión
-    video.style.display = "none";
-    const stream = video.srcObject;
-    const tracks = stream.getTracks();
-    tracks.forEach((track) => track.stop());
-    video.srcObject = null;
-    btnCapture.style.display = "none";
+      // Oculta el video y detén la transmisión
+      video.style.display = "none";
+      const stream = video.srcObject;
+      const tracks = stream.getTracks();
+      tracks.forEach((track) => track.stop());
+      video.srcObject = null;
+      btnCapture.style.display = "none";
 
-    // Muestra la foto capturada
-    photo.style.display = "block";
-    btnDescribe.style.display = "block";
+      // Muestra la foto capturada
+      photo.style.display = "block";
+      btnDescribe.style.display = "block";
+    }
   }
-
   async function startCamera() {
     try {
       // Intenta activar la cámara trasera
@@ -203,7 +208,7 @@ const ImageRecognition = ({ setSearchFood }) => {
           {isLoading && <p>Analyzing image...</p>}
           {error && <p style={{ color: "red" }}>{error}</p>}
           <br />
-          {result && (
+          {result && Array.isArray(result) && (
             <table>
               <thead>
                 <tr>

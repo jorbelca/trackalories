@@ -1,4 +1,3 @@
-import React from "react";
 import { storeMealService } from "../Services/storeMealsService";
 import { mealStore, notificationStore } from "../state/store";
 
@@ -15,12 +14,14 @@ const ListStore = () => {
   let totalProt = 0;
   let totalCarbs = 0;
   let totalFats = 0;
-  meals.forEach((meal) => {
-    totalProt += meal.nf_protein;
-    totalCal += meal.nf_calories;
-    totalCarbs += meal.nf_total_carbohydrate;
-    totalFats += meal.nf_total_fat;
-  });
+  if (meals && Array.isArray(meals)) {
+    meals.forEach((meal) => {
+      totalProt += meal.nf_protein;
+      totalCal += meal.nf_calories;
+      totalCarbs += meal.nf_total_carbohydrate;
+      totalFats += meal.nf_total_fat;
+    });
+  }
 
   const handleSave = async (event) => {
     event.preventDefault();
@@ -70,7 +71,7 @@ const ListStore = () => {
         ""
       )}
       {meals.map((meal) => (
-        <div key={meal.id} className="card-results">
+        <div key={meal.id || meal.food_name} className="card-results">
           <article className="media">
             <figure className="media-left" style={{ alignSelf: "flex-end" }}>
               <p className="image is-64x64">
@@ -143,7 +144,7 @@ const ListStore = () => {
           </article>
         </div>
       ))}
-      {totalCal !== 0 ? (
+      {totalCal !== 0 && (
         <article className="media ">
           <div className="media-content ">
             <nav className="level is-mobile">
@@ -196,8 +197,6 @@ const ListStore = () => {
             </button>
           </div>
         </article>
-      ) : (
-        <></>
       )}
     </>
   );

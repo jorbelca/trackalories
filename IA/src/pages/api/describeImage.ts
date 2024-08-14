@@ -7,7 +7,11 @@ import Cors from "cors";
 
 // Inicializa el middleware CORS
 const cors = Cors({
-  origin: ["http://localhost:5173", "https://trackalories.vercel.app"],
+  origin: [
+    "http://localhost:5173",
+    "https://trackalories.vercel.app",
+    "http://localhost:4173",
+  ],
   methods: ["GET", "HEAD", "POST"],
 });
 

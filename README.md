@@ -1,3 +1,9 @@
+**⚠️ Advertencia**
+
+<p style="font-size: 0.7em;">La funcionalidad de búsqueda <strong>no funciona en producción</strong> en la versión actual del proyecto. Aunque funciona correctamente en el entorno de desarrollo, puede haber problemas o limitaciones en la configuración de producción.
+<br>
+Por favor, utilice la funcionalidad de búsqueda solo en el entorno de desarrollo hasta que resuelva este problema.</p>
+
 ## Trackalories
 
 Trackalories es una aplicación para rastrear la ingesta de calorías. El proyecto consta de un backend desarrollado en Node.js y TypeScript con MongoDB, y un frontend construido con React, TypeScript y Vite, además de ESLint en ambos, ademas en el directorio IA hay una endpoint con una funcionalidad de descripción de imágenes (implementacion de la biblioteca transformers de Xenova).

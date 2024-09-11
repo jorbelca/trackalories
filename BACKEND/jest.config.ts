@@ -13,6 +13,7 @@ const config: Config = {
     },
   },
   verbose: true, // Muestra información detallada de las pruebas
+  setupFilesAfterEnv: ["<rootDir>/src/tests/teardown.ts"],
 };
 
 export default config;

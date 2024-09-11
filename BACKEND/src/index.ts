@@ -14,7 +14,7 @@ import pingRouter from "./routes/pingRoutes";
 import eliminateUserRouter from "./routes/eliminateUserRoutes";
 import clearRouter from "./routes/clearRouter";
 
-const app = express();
+export const app = express();
 
 const corsOptions = {
   origin: ["http://localhost:5173", "https://trackalories.vercel.app"],
@@ -43,19 +43,26 @@ app.use("/api/meals", mealsRouter);
 app.use("/api/personal", personalRouter);
 app.use("/cleardb_test", clearRouter);
 
+// Función para conectar a MongoDB
 async function connectMDB(URI: string | undefined) {
-  // Connect to MongoDB
-  mongoose
-    .connect(URI as string)
-    .then(() => {
-      console.log("Connected to MongoDB");
+  try {
+    await mongoose.connect(URI as string);
+    console.log("Connected to MongoDB");
+
+    // Sólo iniciar el servidor si no estamos en entorno de pruebas o si estamos haciendo pruebas E2E
+    if (process.env.NODE_ENV !== "test" || process.env.TEST_MODE === "e2e") {
       app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);
       });
-    })
-    .catch((error: Error) => {
-      console.error("Error connecting to MongoDB:", error.message);
-    });
+    }
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", (error as Error).message);
+  }
+}
+
+// Conectar a la base de datos solo si no es test o es modo E2E
+if (process.env.NODE_ENV !== "test" || process.env.TEST_MODE === "e2e") {
+  connectMDB(MONGO);
 }
 
 connectMDB(MONGO);

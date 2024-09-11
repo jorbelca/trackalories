@@ -10,8 +10,8 @@
   "scripts": {
     "start": "node build/index.js",
     "dev": "ts-node src/index.ts",
-    "test_mode": "NODE_ENV=test ts-node src/index.ts",
-    "test": "jest",
+    "test_e2e": "NODE_ENV=test TEST_MODE=e2e ts-node src/index.ts",
+    "test": "NODE_ENV=test jest",
     "preview:test": "NODE_ENV=test node build/index.js",
     "build": "tsc",
     "lint": "ts-standard",

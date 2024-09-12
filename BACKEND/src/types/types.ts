@@ -1,11 +1,11 @@
 export interface User {
-  username: String;
-  email: String;
-  password: String;
-  height: Number;
-  weight: Weight[] | String | Number | any;
+  username: string;
+  email: string;
+  password: string;
+  height: number;
+  weight: Weight[] | string | number;
   sex: Sex;
-  activity: Number;
+  activity: number;
   birthdate: Date;
   entries: Entry[];
 }
@@ -16,12 +16,12 @@ export enum Sex {
 }
 
 export interface Entry {
-  date: String | undefined;
+  date: string | undefined;
   data: [];
-  user: String;
+  user: string;
 }
 
 export interface Weight {
-  date: String;
-  weight: Number;
+  date: string;
+  weight: number;
 }

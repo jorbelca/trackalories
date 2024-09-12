@@ -9,54 +9,45 @@ const loginRouter = express.Router();
 loginRouter.post("/", async (request: Request, response: Response) => {
   const { email, password } = request.body;
 
-  const returnedUser = await User.find({ email });
+  // Buscar el usuario por email
+  const returnedUser = await User.findOne({ email });
 
-  if (
-    returnedUser.length === 0 ||
-    !returnedUser ||
-    returnedUser === undefined
-  ) {
+  // Si el usuario no existe
+  if (!returnedUser) {
     return response.status(404).send("No data in the DB");
   }
 
-  const user = returnedUser[0];
+  // Verificar la contraseña
+  const passwordCorrect = await bcrypt.compare(password, returnedUser.password);
 
-  let passwordCorrect;
-  if (user === null) {
-    passwordCorrect = false;
+  if (!passwordCorrect) {
     return response.status(400).send("Wrong password");
-  } else {
-    passwordCorrect = true;
-    bcrypt.compare(password, user.password.toString());
   }
 
-  let userToken: any;
-
-  if (passwordCorrect) {
-    userToken = {
-      username: user.username,
-      id: user._id,
-    };
-  }
+  // Si la contraseña es correcta, generar un token
+  const userToken = {
+    username: returnedUser.username,
+    id: returnedUser._id,
+  };
 
   const token = jwt.sign(userToken, SECRET, {
-    expiresIn: 60 * 60 * 24 * 5,
+    expiresIn: 60 * 60 * 24 * 5, // 5 días
   });
 
   try {
     return response.status(200).json({
-      username: user.username,
-      email: user.email,
-      activity: user.activity,
-      height: user.height,
-      weight: user.weight,
-      sex: user.sex,
-      birthdate: user.birthdate,
+      username: returnedUser.username,
+      email: returnedUser.email,
+      activity: returnedUser.activity,
+      height: returnedUser.height,
+      weight: returnedUser.weight,
+      sex: returnedUser.sex,
+      birthdate: returnedUser.birthdate,
       token,
     });
   } catch (error) {
     console.log(error);
-    return response.status(400).send(error);
+    return response.status(500).send("Server error");
   }
 });
 

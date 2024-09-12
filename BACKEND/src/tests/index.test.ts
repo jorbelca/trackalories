@@ -1,17 +1,99 @@
 // src/tests/server.test.ts
 import request from "supertest";
 import { app } from "../index";
+import mongoose from "mongoose";
+
+const newUser = {
+  username: "testUser",
+  email: "testuser@example.com",
+  password: "securePassword123",
+  sex: "Female",
+  weight: 65,
+  height: 160,
+  activity: 1,
+  birthdate: new Date("1992-1-12"),
+};
 
 describe("Servidor Express", () => {
-  // src/tests/environment.test.ts
+  //Cerrar la conexión y limpiar  la base de datos después de todas las pruebas
+  afterAll(async () => {
+    await mongoose.connection.dropDatabase();
+    await mongoose.disconnect();
+  });
+
   test('NODE_ENV should be "test"', () => {
     expect(process.env.NODE_ENV).toBe("test");
   });
 
   // Test básico para verificar si el servidor responde al endpoint /api/ping
-  it("debería responder con un mensaje en /api/ping", async () => {
+  it("ping a /api/ping", async () => {
     const res = await request(app).get("/api/ping");
     expect(res.statusCode).toEqual(200);
     expect(res.body).toEqual({ message: "PONG" });
+  });
+
+  it("should register a new user successfully", async () => {
+    const response = await request(app)
+      .post("/api/register")
+      .send(newUser)
+      .expect(200); // Asegúrate de que el código de éxito es el que esperas (201 o el que uses)
+
+    // Verificar que la respuesta contiene el mensaje "Registered"
+    expect(response.text).toBe("Registered");
+  });
+  it("should fail when email already exists", async () => {
+    // Segundo registro con el mismo email - debería fallar
+    let newUser2 = { ...newUser };
+    newUser2.username = "test";
+    const response = await request(app)
+      .post("/api/register")
+      .send(newUser2)
+      .expect(400); // Asumiendo que 400 es el código de error para duplicados
+
+    expect(response.body.message).toContain("User validation failed: email");
+  });
+
+  it("should login a user successfully", async () => {
+    const loginData = {
+      email: newUser.email,
+      password: newUser.password,
+    };
+
+    const response = await request(app)
+      .post("/api/login")
+      .send(loginData)
+      .expect(200);
+
+    // Verificamos que el cuerpo de la respuesta tenga los campos esperados
+    expect(response.body).toHaveProperty("username", newUser.username);
+    expect(response.body).toHaveProperty("email", newUser.email);
+    expect(response.body).toHaveProperty("activity", newUser.activity);
+    expect(response.body).toHaveProperty("height", newUser.height);
+    expect(response.body).toHaveProperty("weight", newUser.weight);
+    expect(response.body).toHaveProperty("sex", newUser.sex);
+    expect(response.body).toHaveProperty(
+      "birthdate",
+      newUser.birthdate.toISOString()
+    );
+    expect(response.body).toHaveProperty("token");
+
+    // Validar que el token sea un string y no esté vacío
+    expect(typeof response.body.token).toBe("string");
+    expect(response.body.token).not.toBe("");
+  });
+
+  it("should fail login with incorrect password", async () => {
+    const loginWithWrongData = {
+      email: newUser.email,
+      password: "wrongPassword123",
+    };
+
+    const response = await request(app)
+      .post("/api/login")
+      .send(loginWithWrongData)
+      .expect(400);
+
+    // Verificamos que el mensaje de error esté presente en la respuesta
+    expect(response.text).toBe("Wrong password");
   });
 });

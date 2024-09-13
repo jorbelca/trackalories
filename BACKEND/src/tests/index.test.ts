@@ -14,6 +14,21 @@ const newUser = {
   birthdate: new Date("1992-1-12"),
 };
 
+const mealData = {
+  date: new Date("2024-09-12"),
+  data: [
+    {
+      name: "Pizza",
+      calories: 300,
+      protein: 12,
+      carbs: 36,
+      fat: 10,
+    },
+  ],
+};
+
+let token: string;
+let userID: number;
 describe("Servidor Express", () => {
   //Cerrar la conexión y limpiar  la base de datos después de todas las pruebas
   afterAll(async () => {
@@ -80,6 +95,8 @@ describe("Servidor Express", () => {
     // Validar que el token sea un string y no esté vacío
     expect(typeof response.body.token).toBe("string");
     expect(response.body.token).not.toBe("");
+    token = response.body.token;
+    userID = response.body.userID;
   });
 
   it("should fail login with incorrect password", async () => {
@@ -95,5 +112,100 @@ describe("Servidor Express", () => {
 
     // Verificamos que el mensaje de error esté presente en la respuesta
     expect(response.text).toBe("Wrong password");
+  });
+
+  it("Ping to /api/personal using the token stored, should resolve the personal data of the user ", async () => {
+    const response = await request(app)
+      .get("/api/personal")
+      .set("Authorization", `Bearer ${token}`) // Envía el token en el header de autorización
+      .send({
+        userID: userID,
+      });
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("username");
+    expect(response.body).toHaveProperty("email");
+    expect(response.body).toHaveProperty("activity");
+    expect(response.body).toHaveProperty("height");
+    expect(response.body).toHaveProperty("weight");
+    expect(response.body).toHaveProperty("sex");
+    expect(response.body).toHaveProperty("birthdate");
+  });
+
+  it("Debe poder agregar una nueva comida", async () => {
+    const response = await request(app)
+      .post("/api/meals")
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        userID: userID,
+        date: mealData.date,
+        data: mealData.data,
+      });
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("data"); // Asegurarse de que se devuelva la comida
+    expect(response.body.data).toContainEqual(mealData.data[0]);
+  });
+
+  it("NO Debe poder agregar una nueva comida si no proporciona un token", async () => {
+    const response = await request(app).post("/api/meals").send({
+      userID: userID,
+      date: mealData.date,
+      data: mealData.data,
+    });
+    expect(response.status).toBe(401); // Debe retornar no autorizado
+    expect(response.body).toHaveProperty("error", "Token missing or invalid");
+  });
+
+  it("No debe permitir agregar una comida con un token inválido", async () => {
+    const response = await request(app)
+      .post("/api/meals")
+      .set("Authorization", "Bearer invalid_token") // Token inválido
+      .send({
+        userID: userID,
+        date: mealData.date,
+        data: mealData.data,
+      });
+
+    expect(response.status).toBe(401); // Token inválido, no autorizado
+    expect(response.body).toHaveProperty(
+      "error",
+      "Token missing, invalid or timed out"
+    );
+  });
+
+
+
+  it("Debe obtener las comidas del usuario con token válido", async () => {
+    const response = await request(app)
+      .get("/api/meals")
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        userID: userID,
+      });
+
+    expect(response.status).toBe(200);
+    expect(response.body).toBeInstanceOf(Array); // Las comidas deberían ser un array
+  });
+
+  it("No debe obtener comidas si no se proporciona el token", async () => {
+    const response = await request(app).get("/api/meals").send({
+      userID: userID,
+    });
+
+    expect(response.status).toBe(401); // Sin token, debe ser no autorizado
+    expect(response.body).toHaveProperty("error", "Token missing or invalid");
+  });
+
+  it("No debe obtener comidas con token inválido", async () => {
+    const response = await request(app)
+      .get("/api/meals")
+      .set("Authorization", "Bearer invalid_token") // Token inválido
+      .send({
+        userID: userID,
+      });
+
+    expect(response.status).toBe(401); // Token inválido, debe ser no autorizado
+    expect(response.body).toHaveProperty("error", "Token missing, invalid or timed out");
   });
 });

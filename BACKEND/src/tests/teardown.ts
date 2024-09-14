@@ -1,6 +1,14 @@
-// src/tests/teardown.ts
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-afterAll(async () => {
-  await mongoose.connection.close();
-});
+afterAll((done) => {
+  mongoose
+    .disconnect()
+    .then(() => {
+      console.log("Disconnected from database");
+      done();
+    })
+    .catch((error) => {
+      console.error("Error during teardown:", error);
+      done(error);
+    });
+}, 10000);

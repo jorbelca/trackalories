@@ -11,18 +11,19 @@ eliminateUserRouter.delete(
   async (request: Request, response: Response) => {
     const { userID } = request.body;
 
-    const returnedUser: any = await User.findByIdAndDelete(userID);
-    await Entry.find({ user: userID }).deleteMany();
-
-    if (
-      returnedUser.length === 0 ||
-      !returnedUser ||
-      returnedUser === undefined
-    ) {
-      return response.status(404).json({ error: "No data" });
-    }
-
     try {
+      // Eliminamos el usuario
+      const returnedUser = await User.findByIdAndDelete(userID);
+
+      // Si no se encuentra el usuario, devolvemos 404
+      if (!returnedUser) {
+        return response.status(404).json({ error: "No data" });
+      }
+
+      // Eliminamos todas las entradas relacionadas con el usuario
+      await Entry.deleteMany({ user: userID });
+
+      // Enviamos respuesta exitosa
       return response.status(200).json({ message: "Erased from the DB" });
     } catch (error) {
       console.error(error);

@@ -8,20 +8,19 @@ weightRouter.get(
   "/",
   tokenExtractor,
   async (request: Request, response: Response) => {
-    const { userID } = request.body;
-
-    const returnedUser: any = await User.findById(userID);
-    if (!returnedUser || returnedUser === undefined || returnedUser === null) {
-      return response.status(404).json({ error: "No User" });
-    }
-
-    const weight = returnedUser.weight;
-
     try {
+      const { userID } = request.body; // O considera obtener userID de request.userID si lo extraes del token
+      const returnedUser = await User.findById(userID);
+
+      if (!returnedUser) {
+        return response.status(404).json({ error: "No User" });
+      }
+
+      const { weight } = returnedUser;
       return response.status(200).json(weight);
     } catch (error) {
       console.error(error);
-      return response.status(400).send(error);
+      return response.status(400).json({ error: "Error fetching user weight" });
     }
   }
 );
@@ -30,32 +29,47 @@ weightRouter.post(
   "/",
   tokenExtractor,
   async (request: Request, response: Response) => {
-    const { weight, date, userID } = request.body;
+    try {
+      const { weight, date } = request.body;
+      const { userID } = request.body; // O de nuevo, podrías extraerlo de request.userID si lo manejas así en tokenExtractor
 
-    const user: any = await User.findById(userID);
-    if (user) {
+      const user = await User.findById(userID);
+
+      if (!user) {
+        return response.status(404).json({ error: "Usuario no encontrado" });
+      }
+
+      // Inicializa 'weight' como un arreglo si es null o undefined
+      if (!Array.isArray(user.weight)) {
+        user.weight = [];
+      }
+
+      // Verificar si ya hay un registro de peso en la misma fecha
       if (user.weight.length > 0) {
-        const lastWeight = user.weight[user.weight.length - 1].date;
+        const lastWeightDate = user.weight[user.weight.length - 1].date;
 
-        // eslint-disable-next-line
-        if (date == lastWeight) {
+        if (
+          new Date(date).toDateString() ===
+          new Date(lastWeightDate).toDateString()
+        ) {
           return response
             .status(400)
             .json({ error: "Only one weight post per day" });
         }
       }
-      user.weight = user.weight.concat({ date, weight });
-    }
 
-    try {
-      await User.updateOne({ _id: userID }, { weight: user.weight });
+      // Añadir nuevo registro de peso
+      user.weight.push({ date, weight });
+
+      // Guardar el usuario actualizado
+      await user.save();
 
       return response
         .status(200)
         .json({ username: user.username, weight: user.weight });
     } catch (error) {
       console.error(error);
-      return response.status(400);
+      return response.status(400).json({ error: "Error al guardar el peso" });
     }
   }
 );

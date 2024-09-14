@@ -1,7 +1,6 @@
 // src/tests/server.test.ts
 import request from "supertest";
 import { app } from "../index";
-import mongoose from "mongoose";
 
 const newUser = {
   username: "testUser",
@@ -28,14 +27,13 @@ const mealData = {
 };
 
 let token: string;
-let userID: number;
-describe("Servidor Express", () => {
-  //Cerrar la conexión y limpiar  la base de datos después de todas las pruebas
-  afterAll(async () => {
-    await mongoose.connection.dropDatabase();
-    await mongoose.disconnect();
-  });
 
+const newWeight = {
+  weight: 70,
+  date: new Date("2024-09-12"),
+};
+
+describe("Servidor Express", () => {
   test('NODE_ENV should be "test"', () => {
     expect(process.env.NODE_ENV).toBe("test");
   });
@@ -96,7 +94,6 @@ describe("Servidor Express", () => {
     expect(typeof response.body.token).toBe("string");
     expect(response.body.token).not.toBe("");
     token = response.body.token;
-    userID = response.body.userID;
   });
 
   it("should fail login with incorrect password", async () => {
@@ -117,10 +114,7 @@ describe("Servidor Express", () => {
   it("Ping to /api/personal using the token stored, should resolve the personal data of the user ", async () => {
     const response = await request(app)
       .get("/api/personal")
-      .set("Authorization", `Bearer ${token}`) // Envía el token en el header de autorización
-      .send({
-        userID: userID,
-      });
+      .set("Authorization", `Bearer ${token}`); 
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty("username");
@@ -137,7 +131,6 @@ describe("Servidor Express", () => {
       .post("/api/meals")
       .set("Authorization", `Bearer ${token}`)
       .send({
-        userID: userID,
         date: mealData.date,
         data: mealData.data,
       });
@@ -149,7 +142,6 @@ describe("Servidor Express", () => {
 
   it("NO Debe poder agregar una nueva comida si no proporciona un token", async () => {
     const response = await request(app).post("/api/meals").send({
-      userID: userID,
       date: mealData.date,
       data: mealData.data,
     });
@@ -162,7 +154,6 @@ describe("Servidor Express", () => {
       .post("/api/meals")
       .set("Authorization", "Bearer invalid_token") // Token inválido
       .send({
-        userID: userID,
         date: mealData.date,
         data: mealData.data,
       });
@@ -174,24 +165,17 @@ describe("Servidor Express", () => {
     );
   });
 
-
-
   it("Debe obtener las comidas del usuario con token válido", async () => {
     const response = await request(app)
       .get("/api/meals")
-      .set("Authorization", `Bearer ${token}`)
-      .send({
-        userID: userID,
-      });
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(200);
     expect(response.body).toBeInstanceOf(Array); // Las comidas deberían ser un array
   });
 
   it("No debe obtener comidas si no se proporciona el token", async () => {
-    const response = await request(app).get("/api/meals").send({
-      userID: userID,
-    });
+    const response = await request(app).get("/api/meals");
 
     expect(response.status).toBe(401); // Sin token, debe ser no autorizado
     expect(response.body).toHaveProperty("error", "Token missing or invalid");
@@ -200,12 +184,121 @@ describe("Servidor Express", () => {
   it("No debe obtener comidas con token inválido", async () => {
     const response = await request(app)
       .get("/api/meals")
-      .set("Authorization", "Bearer invalid_token") // Token inválido
-      .send({
-        userID: userID,
-      });
+      .set("Authorization", "Bearer invalid_token"); // Token inválido
 
     expect(response.status).toBe(401); // Token inválido, debe ser no autorizado
-    expect(response.body).toHaveProperty("error", "Token missing, invalid or timed out");
+    expect(response.body).toHaveProperty(
+      "error",
+      "Token missing, invalid or timed out"
+    );
+  });
+
+  it("Debe añadir un nuevo registro de peso si el token es válido", async () => {
+    const response = await request(app)
+      .post("/api/weight")
+      .set("Authorization", `Bearer ${token}`)
+      .send(newWeight);
+
+    expect(response.status).toBe(200);
+    expect(response.body.username).toBe(newUser.username);
+    expect(response.body.weight).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          date: new Date(newWeight.date).toISOString(),
+          weight: newWeight.weight,
+        }),
+      ])
+    );
+  });
+
+  it("Debe devolver el peso del usuario si el token es válido", async () => {
+    const response = await request(app)
+      .get("/api/weight")
+      .set("Authorization", `Bearer ${token}`)
+      .send();
+
+    expect(response.status).toBe(200);
+    expect(response.body[0].weight).toEqual(newWeight.weight); // Compara el peso esperado
+  });
+
+  it("Debe devolver un error 404 si el usuario no existe", async () => {
+    const invalidToken = "Bearer <token-invalido>"; // Token inválido
+
+    const response = await request(app)
+      .get("/api/weight")
+      .set("Authorization", invalidToken)
+      .send();
+
+    expect(response.status).toBe(401); // Token no validado
+    expect(response.body).toHaveProperty(
+      "error",
+      "Token missing, invalid or timed out"
+    );
+  });
+
+  it("Debe devolver un error 400 si ya hay un registro de peso en la misma fecha", async () => {
+    const sameDayWeight = {
+      weight: 72,
+      date: newWeight.date,
+    };
+
+    const response = await request(app)
+      .post("/api/weight")
+      .set("Authorization", `Bearer ${token}`)
+      .send(sameDayWeight);
+
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty(
+      "error",
+      "Only one weight post per day"
+    );
+  });
+
+  it("Debe devolver un error 404 si el usuario no existe", async () => {
+    const invalidToken = "Bearer <token-invalido>";
+
+    const response = await request(app)
+      .post("/api/weight")
+      .set("Authorization", invalidToken)
+      .send(newWeight);
+
+    expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty(
+      "error",
+      "Token missing, invalid or timed out"
+    );
+  });
+
+  it("Debe devolver error 401 si el token es inválido", async () => {
+    const response = await request(app)
+      .delete("/api/eliminate")
+      .set("Authorization", `Bearer invalidtoken`);
+
+    expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty(
+      "error",
+      "Token missing, invalid or timed out"
+    );
+  });
+
+  it("Debe eliminar el usuario y sus entradas si el token es válido", async () => {
+    // Hacer la petición DELETE
+    const response = await request(app)
+      .delete("/api/eliminate")
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body.message).toBe("Erased from the DB");
+
+    // // Verificar que el usuario fue eliminado
+    const responseUserData = await request(app)
+      .get("/api/personal")
+      .set("Authorization", `Bearer ${token}`); 
+
+    expect(responseUserData.status).toBe(404);
+    expect(responseUserData.body).toHaveProperty(
+      "error",
+      "No User"
+    );
   });
 });

@@ -54,7 +54,7 @@ Permite a los usuarios introducir el peso diario, ver el registro y un calculo d
 
 ![Peso](./readmeScreenshots/Weight.png)
 
-#### 8. Descripcion de imagenes por IA (Funcionalidades extra)
+#### 8. Descripcion de imagenes por IA (Funcionalidad extra)
 
 Se elige la imagen o se hace una foto y la funcionalidad describe la imagene para poblar mas facilmente los términos de búsqueda.
 Al clicar la palabra que describe la imagen , se popula directamnte la barra de busqueda. Para Desktop y mobile
@@ -176,7 +176,7 @@ El servidor debería estar corriendo en `http://localhost:PORT`.
 
 ### Scripts Disponibles
 
-(Backend y Frontend funcionan independientemente)
+(Backend, Frontend e IA funcionan independientemente)
 
 #### Backend
 
@@ -194,6 +194,30 @@ El servidor debería estar corriendo en `http://localhost:PORT`.
 #### IA
 
 - `npm run dev`: Inicia el servidor en modo desarrollo.
+
+
+
+
+### Testing
+
+Este proyecto incluye pruebas funcionales para el backend con **Jest** y pruebas E2E con **Cypress**. Para ejecutar las <u>pruebas funcionales del backend</u>, usa el comando:
+
+```bash
+npm run test
+```
+
+Para las <u>pruebas E2E</u>, primero inicia el servidor en modo de pruebas con:
+
+```bash
+npm run test_e2e
+```
+
+Luego, navega a la carpeta del frontend:
+
+```bash
+cd front
+npm run cypress
+```
 
 ### Contribuciones
 
